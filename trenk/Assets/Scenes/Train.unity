@@ -231,7 +231,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -256,13 +256,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 30, y: 125, z: 30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1061590583
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061590585}
   - component: {fileID: 1061590584}
+  - component: {fileID: 1061590587}
   - component: {fileID: 1061590586}
   m_Layer: 0
   m_Name: ArenaManager
@@ -298,7 +299,7 @@ MonoBehaviour:
   fencePrefab: {fileID: 6800951995778960053, guid: 3a2fa11c35f0eba44add70e00c612158,
     type: 3}
   onRoundPrepare: {fileID: 11400000, guid: 466a6ec65d4a7824480ae27e4a83acce, type: 2}
-  arenaHeight: 50
+  arenaHeight: 60
 --- !u!4 &1061590585
 Transform:
   m_ObjectHideFlags: 0
@@ -331,3 +332,15 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1061590587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061590583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18ebe9c776d48ee44b7f6a60f22a01d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
