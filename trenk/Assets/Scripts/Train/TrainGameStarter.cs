@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class TrainGameStarter : MonoBehaviour
 {
+    private struct Position
+    {
+        public int x, y;
+
+        public Position(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab;
+    public GameObject minePrefab;
+    public Transform playerParent, environmentParent;
     public GameEvent onRoundPrepare;
     public int arenaHeight = 30;
 
@@ -23,8 +36,11 @@ public class TrainGameStarter : MonoBehaviour
 
     private byte[,] board; // Stores positional data in arena
     public byte[,] Board { get { return board; } }
-
     private GameObject homePlayer;
+    public GameObject HomePlayer { get { return homePlayer; } }
+    private byte homeRot; // Current player direction
+    public byte HomeRot { get { return homeRot; } }
+    private Position homePos;
 
     void Start()
     {
@@ -34,21 +50,88 @@ public class TrainGameStarter : MonoBehaviour
         // Ready board and physical arena
         for (int i = 1; i < arenaHeight - 1; i++)
         {
+            // Place hazards on board
             board[i, 0] = HAZARD;
             board[0, i] = HAZARD;
             board[i, arenaHeight - 1] = HAZARD;
             board[arenaHeight - 1, i] = HAZARD;
 
-            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, 0), Quaternion.identity);
-            GameObject.Instantiate(fencePrefab, new Vector3(0, 0, i), Quaternion.identity);
-            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, arenaHeight - 1), Quaternion.identity);
-            GameObject.Instantiate(fencePrefab, new Vector3(arenaHeight - 1, 0, i), Quaternion.identity);
+            // Place hazards in scene
+            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, 0), Quaternion.identity, environmentParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(0, 0, i), Quaternion.identity, environmentParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, arenaHeight - 1), Quaternion.identity, environmentParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(arenaHeight - 1, 0, i), Quaternion.identity, environmentParent);
         }
 
-        // Initialize player
-        homePlayer = Instantiate(playerPrefab);
-        homePlayer.transform.position = new Vector3((int)(arenaHeight / 3), 0, (int)(arenaHeight / 2));
+        // Place player on board
+        homePos = new Position(arenaHeight / 3, arenaHeight / 2);
+        homeRot = RIGHT;
+        // Initialize player in scene
+        homePlayer = Instantiate(playerPrefab, playerParent);
+        homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
         // Commence round readying
         onRoundPrepare.Raise();
+    }
+
+    private byte ClampRotation(int rot)
+    {
+        if (rot < 0)
+            rot = 3;
+        else if (rot > 3)
+            rot = 0;
+
+        return (byte)(rot);
+    }
+
+    public byte RotateHomeLeft()
+    {
+        homeRot = ClampRotation(homeRot - 1);
+        return homeRot;
+    }
+
+    public byte RotateHomeRight()
+    {
+        homeRot = ClampRotation(homeRot + 1);
+        return homeRot;
+    }
+
+    public bool MovePlayer()
+    {
+        bool hit = false;
+
+        // Place mine on board
+        board[homePos.x, homePos.y] = HAZARD;
+        // Place mine in scene
+        GameObject.Instantiate(minePrefab, new Vector3(homePos.x, 0, homePos.y), Quaternion.identity, environmentParent);
+
+        // Determine resulting player position
+        switch (homeRot)
+        {
+            case UP:
+                homePos.y--;
+                break;
+            case RIGHT:
+                homePos.x++;
+                break;
+            case DOWN:
+                homePos.y++;
+                break;
+            case LEFT:
+                homePos.x--;
+                break;
+        }
+
+        // If no collisions...
+        if (board[homePos.x, homePos.y] == EMPTY)
+        {
+            // Move player on board
+            board[homePos.x, homePos.y] = P1;
+            // Move player in scene
+            homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+        }
+        else
+            hit = true;
+
+        return hit;
     }
 }

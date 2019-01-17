@@ -5,24 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(TrainGameStarter))]
 public class TrainRoundManager : MonoBehaviour
 {
-    public int frameStep = 5;
+    public int framesPerStep = 5;
 
-    private byte[,] board;
-    private int gameFrame;
-    private int cycleFrame;
+    private TrainGameStarter starter;
+    private int gameStep;
+    private int cycleStep;
     private bool turnChosen, requestLeft, requestRight;
 
     private void Start()
     {
-        board = GetComponent<TrainGameStarter>().Board;
+        starter = GetComponent<TrainGameStarter>();
     }
 
     private void FixedUpdate()
     {
         // Wait for player inputs for some frames
-        if (cycleFrame < frameStep)
+        if (cycleStep < framesPerStep)
         {
-            cycleFrame++; // Increment cycle progress
+            cycleStep++; // Increment cycle progress
 
             // If an input hasn't been made this cycle...
             if (!turnChosen)
@@ -40,20 +40,34 @@ public class TrainRoundManager : MonoBehaviour
         }
         else
         {
-            // Change world transforms
-            if (requestLeft)
-                Debug.Log("l");
-            else if (requestRight)
-                Debug.Log("r");
-            else
-                Debug.Log("_");
+            byte homeRot = 0;
 
-            cycleFrame = 0; // Reset cycle progress
+            // Change player direction based on input
+            if (requestLeft)
+                starter.RotateHomeLeft();
+            else if (requestRight)
+                starter.RotateHomeRight();
+            else
+                homeRot = starter.HomeRot;
+
+            bool hit = starter.MovePlayer();
+
+            //if (hit)
+                
+
+            cycleStep = 0; // Reset cycle progress
+
             // Reset input polling
             turnChosen = requestLeft = requestRight = false;
         }
 
         // Increment overall frame counter
-        gameFrame++;
+        gameStep++;
+    }
+
+    public void Reset()
+    {
+        gameStep = 0;
+        cycleStep = 0;
     }
 }
