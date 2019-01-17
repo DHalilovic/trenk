@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Input\InputEventManager.cs" />
     <Compile Include="Assets\Scripts\Interfaces\Singleton.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameStarter.cs" />
+    <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

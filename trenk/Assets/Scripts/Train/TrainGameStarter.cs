@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TrainGameStarter : MonoBehaviour
 {
+    // Contains gameObject placement on board and in scene
     private struct Position
     {
         public int x, y;
@@ -16,11 +17,11 @@ public class TrainGameStarter : MonoBehaviour
     }
 
     public GameObject playerPrefab; // Template GameObject for players
-    public GameObject fencePrefab;
-    public GameObject minePrefab;
-    public Transform playerParent, environmentParent;
-    public GameEvent onRoundPrepare;
-    public int arenaHeight = 30;
+    public GameObject fencePrefab; // Template GameObject for borders
+    public GameObject minePrefab; // Template GameObject for mines
+    public Transform playerParent, fenceParent, mineParent; // Empties for organizational purposes
+    public GameEvent onRoundPrepare, OnRoundEnd; // Events to signal
+    public int arenaHeight = 30; // Length, width of square arena
 
     //  Grid space markers
     [HideInInspector] public const byte EMPTY = 0;
@@ -57,10 +58,10 @@ public class TrainGameStarter : MonoBehaviour
             board[arenaHeight - 1, i] = HAZARD;
 
             // Place hazards in scene
-            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, 0), Quaternion.identity, environmentParent);
-            GameObject.Instantiate(fencePrefab, new Vector3(0, 0, i), Quaternion.identity, environmentParent);
-            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, arenaHeight - 1), Quaternion.identity, environmentParent);
-            GameObject.Instantiate(fencePrefab, new Vector3(arenaHeight - 1, 0, i), Quaternion.identity, environmentParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, 0), Quaternion.identity, fenceParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(0, 0, i), Quaternion.identity, fenceParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(i, 0, arenaHeight - 1), Quaternion.identity, fenceParent);
+            GameObject.Instantiate(fencePrefab, new Vector3(arenaHeight - 1, 0, i), Quaternion.identity, fenceParent);
         }
 
         // Place player on board
@@ -73,6 +74,7 @@ public class TrainGameStarter : MonoBehaviour
         onRoundPrepare.Raise();
     }
 
+    // Prevent rotation from exceeding one full cycle
     private byte ClampRotation(int rot)
     {
         if (rot < 0)
@@ -95,6 +97,7 @@ public class TrainGameStarter : MonoBehaviour
         return homeRot;
     }
 
+    // Move player one space based on position, direction
     public bool MovePlayer()
     {
         bool hit = false;
@@ -102,7 +105,7 @@ public class TrainGameStarter : MonoBehaviour
         // Place mine on board
         board[homePos.x, homePos.y] = HAZARD;
         // Place mine in scene
-        GameObject.Instantiate(minePrefab, new Vector3(homePos.x, 0, homePos.y), Quaternion.identity, environmentParent);
+        GameObject.Instantiate(minePrefab, new Vector3(homePos.x, 0, homePos.y), Quaternion.identity, mineParent);
 
         // Determine resulting player position
         switch (homeRot)
@@ -133,5 +136,12 @@ public class TrainGameStarter : MonoBehaviour
             hit = true;
 
         return hit;
+    }
+
+    // Remove mines from board, scene
+    public void Clean()
+    {
+        foreach (Transform child in mineParent.transform)
+            GameObject.Destroy(child.gameObject);
     }
 }

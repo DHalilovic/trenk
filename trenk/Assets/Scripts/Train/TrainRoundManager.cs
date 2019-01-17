@@ -35,20 +35,6 @@ public class TrainRoundManager : MonoBehaviour, Movement
         if (cycleStep < framesPerStep)
         {
             cycleStep++; // Increment cycle progress
-
-            //// If an input hasn't been made this cycle...
-            //if (!turnChosen)
-            //{
-            //    // Poll inputs
-            //    if (Input.GetKeyDown(KeyCode.A))
-            //    {
-            //        requestLeft = turnChosen = true;
-            //    }
-            //    else if (Input.GetKeyDown(KeyCode.D))
-            //    {
-            //        requestRight = turnChosen = true;
-            //    }
-            //}
         }
         else
         {
@@ -56,16 +42,20 @@ public class TrainRoundManager : MonoBehaviour, Movement
 
             // Change player direction based on input
             if (requestLeft)
-                starter.RotateHomeLeft();
+                homeRot = starter.RotateHomeLeft();
             else if (requestRight)
-                starter.RotateHomeRight();
+                homeRot = starter.RotateHomeRight();
             else
                 homeRot = starter.HomeRot;
 
             bool hit = starter.MovePlayer();
-
-            //if (hit)
-                
+            
+            // If player hits something...
+            if (hit)
+            {
+                // Call for end of round
+                starter.OnRoundEnd.Raise();
+            }   
 
             cycleStep = 0; // Reset cycle progress
 
@@ -77,6 +67,7 @@ public class TrainRoundManager : MonoBehaviour, Movement
         gameStep++;
     }
 
+    // Reset steps for new round gameplay
     public void Reset()
     {
         gameStep = 0;

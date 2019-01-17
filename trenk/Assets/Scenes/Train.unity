@@ -263,6 +263,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &996949385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 996949386}
+  m_Layer: 0
+  m_Name: Mines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &996949386
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996949385}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.525608, y: 14.694836, z: 31.19317}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1061590583
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,10 +302,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1061590585}
+  - component: {fileID: 1061590590}
   - component: {fileID: 1061590584}
   - component: {fileID: 1061590587}
   - component: {fileID: 1061590588}
   - component: {fileID: 1061590586}
+  - component: {fileID: 1061590589}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -302,8 +334,10 @@ MonoBehaviour:
   minePrefab: {fileID: 6800951995778960053, guid: 5e6f8a53b32b27b4c8f7eabf0ed3b8a0,
     type: 3}
   playerParent: {fileID: 1440059192}
-  environmentParent: {fileID: 2093743571}
+  fenceParent: {fileID: 2093743571}
+  mineParent: {fileID: 996949386}
   onRoundPrepare: {fileID: 11400000, guid: 466a6ec65d4a7824480ae27e4a83acce, type: 2}
+  OnRoundEnd: {fileID: 11400000, guid: 2d30d51d1c906c44ea8979675d0443dc, type: 2}
   arenaHeight: 60
 --- !u!4 &1061590585
 Transform:
@@ -357,6 +391,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1061590588}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1061590587
@@ -384,6 +429,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a835bcbe55c0047a1ffe463a2d6cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1061590589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061590583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df8176d5d442474ebdcd1e096133dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 2d30d51d1c906c44ea8979675d0443dc, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1061590587}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1061590588}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1061590584}
+        m_MethodName: Clean
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1061590590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061590583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577d0da3826e3b24f8bfc43984860680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPause: {fileID: 11400000, guid: 59d012a6ad3e45444a181adafd62ee0f, type: 2}
+  onUnpause: {fileID: 11400000, guid: e676e3ef83d85594fbe19bcb6bd8f0aa, type: 2}
 --- !u!1 &1440059191
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2093743571}
   m_Layer: 0
-  m_Name: Environment
+  m_Name: Fences
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
