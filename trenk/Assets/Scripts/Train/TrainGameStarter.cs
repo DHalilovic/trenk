@@ -85,13 +85,13 @@ public class TrainGameStarter : MonoBehaviour
 
     public byte RotateHomeLeft()
     {
-        homeRot = ClampRotation(homeRot - 1);
+        homeRot = ClampRotation(homeRot + 1);
         return homeRot;
     }
 
     public byte RotateHomeRight()
     {
-        homeRot = ClampRotation(homeRot + 1);
+        homeRot = ClampRotation(homeRot - 1);
         return homeRot;
     }
 

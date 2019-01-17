@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(TrainGameStarter))]
-public class TrainRoundManager : MonoBehaviour
+public class TrainRoundManager : MonoBehaviour, Movement
 {
     public int framesPerStep = 5;
 
@@ -17,6 +17,18 @@ public class TrainRoundManager : MonoBehaviour
         starter = GetComponent<TrainGameStarter>();
     }
 
+    public void OnLeft()
+    {
+        if (!turnChosen)
+            requestLeft = turnChosen = true;
+    }
+
+    public void OnRight()
+    {
+        if (!turnChosen)
+            requestRight = turnChosen = true;
+    }
+
     private void FixedUpdate()
     {
         // Wait for player inputs for some frames
@@ -24,19 +36,19 @@ public class TrainRoundManager : MonoBehaviour
         {
             cycleStep++; // Increment cycle progress
 
-            // If an input hasn't been made this cycle...
-            if (!turnChosen)
-            {
-                // Poll inputs
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    requestLeft = turnChosen = true;
-                }
-                else if (Input.GetKeyDown(KeyCode.D))
-                {
-                    requestRight = turnChosen = true;
-                }
-            }
+            //// If an input hasn't been made this cycle...
+            //if (!turnChosen)
+            //{
+            //    // Poll inputs
+            //    if (Input.GetKeyDown(KeyCode.A))
+            //    {
+            //        requestLeft = turnChosen = true;
+            //    }
+            //    else if (Input.GetKeyDown(KeyCode.D))
+            //    {
+            //        requestRight = turnChosen = true;
+            //    }
+            //}
         }
         else
         {
