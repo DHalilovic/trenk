@@ -6,7 +6,7 @@
       <File FileName="Assets/Scripts/Arena/MovementInput.cs" Line="4" Column="1" />
       <File FileName="Assets/Scripts/SceneLoader.cs" Line="12" Column="1" />
       <File FileName="Assets/Scripts/Utility/SceneLoader.cs" Line="13" Column="1" />
-      <File FileName="Assets/Scripts/Utility/LobbyMessager.cs" Line="7" Column="14" />
+      <File FileName="Assets/Scripts/Utility/LobbyMessager.cs" Line="26" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
