@@ -6,8 +6,12 @@ using UnityEngine.Networking;
 public class LobbyMessager : MonoBehaviour
 {
     public string serverUrl;
+    public int timeout;
 
-    public void GetHost()
+    private string hostUrl;
+    public string HostUrl{get { return hostUrl; } }
+
+    public void GetRandomHost()
     {
 
     }
@@ -17,14 +21,40 @@ public class LobbyMessager : MonoBehaviour
         StartCoroutine(AddSelfHostCo());
     }
 
+    public void RemoveSelfHost()
+    {
+        StartCoroutine(RemoveSelfHostCo());
+    }
+
+    IEnumerator GetRandomHostCo()
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(serverUrl))
+        {
+            www.timeout = 1;
+            Debug.Log("Sending...");
+            yield return www.SendWebRequest();
+            Debug.Log("Get Sent");
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                hostUrl = www.downloadHandler.text;
+                Debug.Log("Received " + hostUrl);
+            }
+        }
+    }
+
     IEnumerator AddSelfHostCo()
     {
         using (UnityWebRequest www = UnityWebRequest.Post(serverUrl, new WWWForm()))
         {
-            www.timeout = 1;
-            Debug.Log("ABOUT TO SEND");
+            www.timeout = timeout;
+            Debug.Log("Sending...");
             yield return www.SendWebRequest();
-            Debug.Log("SENT");
+            Debug.Log("Post Sent");
 
             if (www.isNetworkError || www.isHttpError)
             {
@@ -37,8 +67,27 @@ public class LobbyMessager : MonoBehaviour
         }
     }
 
-    public void RemoveSelfHost()
+    IEnumerator RemoveSelfHostCo()
     {
+        using (UnityWebRequest www = UnityWebRequest.Delete(serverUrl))
+        {
+            www.timeout = 1;
+            Debug.Log("Sending...");
+            yield return www.SendWebRequest();
+            Debug.Log("Delete Sent");
 
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Deleted");
+            }
+        }
     }
+
+
+
+
 }
