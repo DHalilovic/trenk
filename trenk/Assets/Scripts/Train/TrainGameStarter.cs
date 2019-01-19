@@ -98,7 +98,7 @@ public class TrainGameStarter : MonoBehaviour
     }
 
     // Move player one space based on position, direction
-    public bool MovePlayer()
+    public bool Move()
     {
         bool hit = false;
 

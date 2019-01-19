@@ -13,8 +13,8 @@ public class VsGameStarter : MonoBehaviour
 
     //  Grid space markers
     [HideInInspector] public const byte EMPTY = 0;
-    [HideInInspector] public const byte P1 = 1;
-    [HideInInspector] public const byte P2 = 2;
+    [HideInInspector] public const byte HOME = 1;
+    [HideInInspector] public const byte AWAY = 2;
     [HideInInspector] public const byte HAZARD = 3;
 
     // Indicate which direction each player is travelling
@@ -43,9 +43,19 @@ public class VsGameStarter : MonoBehaviour
             this.x = x;
             this.y = y;
         }
+
+        public static bool operator ==(Position a, Position b)
+        {
+            return a.x == b.x && a.y == b.y;
+        }
+
+        public static bool operator !=(Position a, Position b)
+        {
+            return !(a == b);
+        }
     }
 
-    void Start()
+    public virtual void Start()
     {
         // Initialize underlying arena
         Board = new byte[arenaHeight, arenaHeight];
@@ -113,5 +123,85 @@ public class VsGameStarter : MonoBehaviour
     {
         AwayRot = ClampRotation(AwayRot - 1);
         return AwayRot;
+    }
+
+    // Move players one space based on position, direction
+    public byte Move()
+    {
+        byte hit = 0;
+
+        // Place mines on board
+        Board[homePos.x, homePos.y] = HAZARD;
+        Board[awayPos.x, awayPos.y] = HAZARD;
+        // Place mines in scene
+        GameObject.Instantiate(minePrefab, new Vector3(homePos.x, 0, homePos.y), Quaternion.identity, mineParent);
+        GameObject.Instantiate(minePrefab, new Vector3(awayPos.x, 0, awayPos.y), Quaternion.identity, mineParent);
+
+        // Determine resulting local player position via input
+        switch (HomeRot)
+        {
+            case UP:
+                homePos.y--;
+                break;
+            case RIGHT:
+                homePos.x++;
+                break;
+            case DOWN:
+                homePos.y++;
+                break;
+            case LEFT:
+                homePos.x--;
+                break;
+        }
+
+        // Determine resulting opponent position via network messages
+        switch (AwayRot)
+        {
+            case UP:
+                awayPos.y--;
+                break;
+            case RIGHT:
+                awayPos.x++;
+                break;
+            case DOWN:
+                awayPos.y++;
+                break;
+            case LEFT:
+                awayPos.x--;
+                break;
+        }
+
+        // If players collide...
+        if (homePos == awayPos)
+        {
+            // Declare tie
+            hit = HAZARD;
+            Debug.Log("TIE");
+        }
+        else
+        {
+            // Otherwise determine if players hit something else
+            bool homeSafe = Board[homePos.x, homePos.y] == EMPTY || Board[homePos.x, homePos.y] == HOME;
+            bool awaySafe = Board[awayPos.x, awayPos.y] == EMPTY || Board[awayPos.x, awayPos.y] == AWAY;
+
+            // If neither player collided...
+            if (homeSafe && awaySafe)
+            {
+                // Move local players on board
+                Board[homePos.x, homePos.y] = HOME;
+                Board[awayPos.x, awayPos.y] = AWAY;
+                // Move local players in scene
+                HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+                AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+            }
+            else if (!homeSafe)
+                hit = HOME;
+            else if (!awaySafe)
+                hit = AWAY;
+            else
+                hit = HAZARD;
+        }
+
+        return hit;
     }
 }

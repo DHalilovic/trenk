@@ -48,7 +48,7 @@ public class TrainRoundManager : MonoBehaviour, Movement
             else
                 homeRot = starter.HomeRot;
 
-            bool hit = starter.MovePlayer();
+            bool hit = starter.Move();
             
             // If player hits something...
             if (hit)

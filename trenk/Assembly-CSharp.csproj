@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Menu\MenuManager.cs" />
     <Compile Include="Assets\Scripts\Menu\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Online\HostGameStarter.cs" />
+    <Compile Include="Assets\Scripts\Online\HostRoundManager.cs" />
     <Compile Include="Assets\Scripts\Online\LobbyMessager.cs" />
     <Compile Include="Assets\Scripts\Online\VsGameStarter.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameStarter.cs" />
