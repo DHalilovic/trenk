@@ -69,12 +69,12 @@
     <Compile Include="Assets\Scripts\Input\InputEventHandler.cs" />
     <Compile Include="Assets\Scripts\Input\InputEventManager.cs" />
     <Compile Include="Assets\Scripts\Interfaces\Singleton.cs" />
+    <Compile Include="Assets\Scripts\Menu\MenuManager.cs" />
+    <Compile Include="Assets\Scripts\Menu\SceneLoader.cs" />
+    <Compile Include="Assets\Scripts\Online\LobbyMessager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameStarter.cs" />
     <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
-    <Compile Include="Assets\Scripts\Utility\LobbyMessager.cs" />
-    <Compile Include="Assets\Scripts\Utility\MenuManager.cs" />
-    <Compile Include="Assets\Scripts\Utility\SceneLoader.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
