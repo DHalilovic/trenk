@@ -5,9 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(TrainGameStarter))]
 public class TrainRoundManager : MonoBehaviour, Movement
 {
-    public int framesPerStep = 5;
-
     private TrainGameStarter starter;
+    private int framesPerStep;
     private int gameStep;
     private int cycleStep;
     private bool turnChosen, requestLeft, requestRight;
@@ -15,6 +14,7 @@ public class TrainRoundManager : MonoBehaviour, Movement
     private void Start()
     {
         starter = GetComponent<TrainGameStarter>();
+        framesPerStep = starter.framesPerStep;
     }
 
     public void OnLeft()

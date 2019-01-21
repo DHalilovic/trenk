@@ -339,6 +339,7 @@ MonoBehaviour:
   onRoundPrepare: {fileID: 11400000, guid: 466a6ec65d4a7824480ae27e4a83acce, type: 2}
   OnRoundEnd: {fileID: 11400000, guid: 2d30d51d1c906c44ea8979675d0443dc, type: 2}
   arenaHeight: 60
+  framesPerStep: 4
 --- !u!4 &1061590585
 Transform:
   m_ObjectHideFlags: 0
@@ -416,7 +417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ebe9c776d48ee44b7f6a60f22a01d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  framesPerStep: 3
 --- !u!114 &1061590588
 MonoBehaviour:
   m_ObjectHideFlags: 0

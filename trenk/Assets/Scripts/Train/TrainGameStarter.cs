@@ -22,6 +22,7 @@ public class TrainGameStarter : MonoBehaviour
     public Transform playerParent, fenceParent, mineParent; // Empties for organizational purposes
     public GameEvent onRoundPrepare, OnRoundEnd; // Events to signal
     public int arenaHeight = 30; // Length, width of square arena
+    public int framesPerStep = 3;
 
     //  Grid space markers
     [HideInInspector] public const byte EMPTY = 0;
@@ -97,6 +98,18 @@ public class TrainGameStarter : MonoBehaviour
         return homeRot;
     }
 
+    // Smoovely move player from start to destination
+    IEnumerator Shift(GameObject o, Vector3 start, Vector3 end)
+    {
+        for (int i = 0; i < framesPerStep; i++)
+        {
+            // Move object towards destination in even increments
+            o.transform.position = Vector3.Lerp(start, end, 1.0f * i / framesPerStep);
+            // Wait a frame
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
     // Move player one space based on position, direction
     public bool Move()
     {
@@ -130,7 +143,8 @@ public class TrainGameStarter : MonoBehaviour
             // Move player on board
             board[homePos.x, homePos.y] = P1;
             // Move player in scene
-            homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+            //homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+            StartCoroutine(Shift(homePlayer, homePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
         }
         else
             hit = true;

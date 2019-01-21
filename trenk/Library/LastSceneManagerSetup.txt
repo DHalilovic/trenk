@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Online_T1_Host.unity
+- path: Assets/Scenes/Train.unity
   isLoaded: 1
   isActive: 1
