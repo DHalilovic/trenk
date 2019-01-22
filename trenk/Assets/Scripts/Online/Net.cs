@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -12,14 +13,23 @@ public class Net
     private readonly string targetIp; // Opponent's address
     private Socket listenerSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
-    private NetworkStream stream; // Wraps socket for data retrieval
+    private BufferedStream stream; // Wraps socket for data retrieval
     private readonly byte[] readBuffer = new byte[5000];
 
-    public Net(INetSerializer serializer, bool server, string targetIp)
+    public Net(INetSerializer serializer, bool server, string targetIp, short targetPort)
     {
         this.serializer = serializer;
         this.server = server;
         this.targetIp = targetIp;
+        this.targetPort = targetPort;
+    }
+
+    // Testing without serializer
+    public Net(bool server, string targetIp, short targetPort)
+    {
+        this.server = server;
+        this.targetIp = targetIp;
+        this.targetPort = targetPort;
     }
 
     public void Listen(int port)
@@ -53,7 +63,7 @@ public class Net
         {
             clientSocket = temp;
             clientSocket.NoDelay = true; // Improve performance
-            stream = new NetworkStream(clientSocket);
+            stream = new BufferedStream(new NetworkStream(clientSocket));
         }
         else
         {
@@ -68,20 +78,15 @@ public class Net
 
     public void OnDisconnect(IAsyncResult ar)
     {
-        stream.Close();
-        clientSocket.Close();
+        stream.Dispose();
         clientSocket = null;
     }
 
     public void Send(short type, int length, byte[] data)
     {
-        //stream.BeginWrite(new byte[] { (byte)(type >> 8) }, 0, 2, OnSend, null);
         // Must send type, length first but still asynchronously
-        stream.BeginWrite(data, 0, data.Length, OnSend, null);
-    }
-
-    public void OnSend(IAsyncResult ar)
-    {
-
+        stream.WriteAsync(BitConverter.GetBytes(type), 0, 2);
+        stream.WriteAsync(BitConverter.GetBytes(length), 0, 4);
+        stream.WriteAsync(data, 0, 4);
     }
 }
