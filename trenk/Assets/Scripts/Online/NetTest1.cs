@@ -11,7 +11,7 @@ public class NetTest1 : MonoBehaviour
     public short localPort = 8080;
     public short targetPort = 8080;
     public string targetIp; // Opponent's address
-    public bool server;
+    public bool Server { get; set; }
 
     private Socket listenerSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
@@ -24,26 +24,36 @@ public class NetTest1 : MonoBehaviour
         IPAddress localIp = ipHostInfo.AddressList[0];
         IPEndPoint localEndPoint = new IPEndPoint(localIp, localPort);
 
-        if (server)
+        if (Server)
         {
+            Debug.Log("Server");
+            DebugConsole.Log("Server");
+
             listenerSocket = new Socket(localIp.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
             listenerSocket.Bind(localEndPoint);
             listenerSocket.Listen(100);
-            listenerSocket.BeginAccept(OnListenerConnect, null);
+            listenerSocket.BeginAccept(OnEndAccept, null);
         }
         else
         {
+            Debug.Log("Client");
+            DebugConsole.Log("Client");
+
             clientSocket = new Socket(localIp.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
             clientSocket.BeginConnect(new IPEndPoint(IPAddress.Parse(targetIp), targetPort), OnEndConnect, null);
         }
 
         Debug.Log("Listening...");
+        DebugConsole.Log("Listening...");
     }
 
-    protected void OnListenerConnect(IAsyncResult ar)
+    protected void OnEndAccept(IAsyncResult ar)
     {
+        Debug.Log("Received request");
+        DebugConsole.Log("Received request");
+
         Socket temp = listenerSocket.EndAccept(ar);
 
         // Accept only client provided by matchmaking
@@ -52,6 +62,7 @@ public class NetTest1 : MonoBehaviour
             clientSocket = temp;
             clientSocket.NoDelay = true; // Improve performance
             stream = new BufferedStream(new NetworkStream(clientSocket));
+            Debug.Log("Connected");
         }
         else
         {
@@ -61,6 +72,7 @@ public class NetTest1 : MonoBehaviour
 
     private void OnEndConnect(IAsyncResult ar)
     {
+        Debug.Log("Connection successful");
         clientSocket.EndConnect(ar);
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
     }

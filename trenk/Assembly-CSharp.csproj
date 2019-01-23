@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Control\Movement.cs" />
     <Compile Include="Assets\Scripts\Control\MovementInput.cs" />
+    <Compile Include="Assets\Scripts\Debug\DebugConsole.cs" />
     <Compile Include="Assets\Scripts\GameEvent\GameEvent.cs" />
     <Compile Include="Assets\Scripts\GameEvent\GameEventListener.cs" />
     <Compile Include="Assets\Scripts\InputConfig\InputDict.cs" />

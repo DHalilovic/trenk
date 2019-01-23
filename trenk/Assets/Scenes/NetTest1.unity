@@ -206,7 +206,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &102975798
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,8 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPort: 8080
   targetPort: 8080
-  targetIp: 127.0.0.1
-  server: 0
+  targetIp: 10.0.2.2
 --- !u!4 &102975800
 Transform:
   m_ObjectHideFlags: 0
@@ -1006,4 +1005,58 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1860394173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1860394175}
+  - component: {fileID: 1860394174}
+  m_Layer: 0
+  m_Name: Debug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1860394174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860394173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5903756bcc531a54cb71f069d8b45c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugGui: {fileID: 0}
+  defaultGuiPosition: {x: 0.01, y: 0.98, z: 0}
+  defaultGuiScale: {x: 0.5, y: 0.5, z: 1}
+  normal: {r: 0, g: 1, b: 0, a: 1}
+  warning: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  error: {r: 1, g: 0, b: 0, a: 1}
+  maxMessages: 30
+  lineSpacing: 0.02
+  draggable: 1
+  visible: 1
+  pixelCorrect: 0
+--- !u!4 &1860394175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860394173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.525608, y: 14.694836, z: 31.19317}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
