@@ -263,6 +263,12 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
+    <Reference Include="ZeroFormatter">
+      <HintPath>Assets/Plugins/ZeroFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroFormatter.Interfaces">
+      <HintPath>Assets/Plugins/ZeroFormatter.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.3.0f2\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
     </Reference>
