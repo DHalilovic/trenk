@@ -248,6 +248,12 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.3.0f2/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="ZeroFormatter">
+      <HintPath>Assets/Plugins/ZeroFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroFormatter.Interfaces">
+      <HintPath>Assets/Plugins/ZeroFormatter.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Advertisements">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.dll</HintPath>
     </Reference>
@@ -262,12 +268,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter">
-      <HintPath>Assets/Plugins/ZeroFormatter.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter.Interfaces">
-      <HintPath>Assets/Plugins/ZeroFormatter.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.3.0f2\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -654,6 +654,7 @@
     <Compile Include="Assets\Scripts\Online\HostRoundManager.cs" />
     <Compile Include="Assets\Scripts\Online\INetSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\LobbyMessager.cs" />
+    <Compile Include="Assets\Scripts\Online\MessageSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\Net.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest1.cs" />
     <Compile Include="Assets\Scripts\Online\VsGameStarter.cs" />

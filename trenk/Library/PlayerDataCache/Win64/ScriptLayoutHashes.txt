@@ -2,7 +2,7 @@ Win64
 PlayerPath?
 E:/Unity/Projects/trenk/trenk/Builds/Win64/trenk1.exe
 SceneListBegin?
-Assets/Scenes/NetTest1.unity
+Assets/Scenes/NetTest2.unity
 SceneListEnd?
 984dcc0ba3707b7691fbdca8ff508d28 Unity.TextMeshPro.dll:TMPro.TMP_SelectionCaret
 01aa15e337e3a9c62f15153dfac6d589 Unity.TextMeshPro.dll:TMPro.TMP_Dropdown
@@ -125,6 +125,7 @@ b3ab2106268377ffe25dd18ac23dca28 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.Analytics.Editor.dll:UnityEditor.Analytics.AnalyticsEventTrackerEditor
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.TextMeshPro.dll:TMPro.TMP_SpriteAnimator
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.TrainRoundManager
+b5d7c5ab0764ea68cded1ae2efbbf34f Assembly-CSharp.dll:.Net
 8f6ddeb54391d0cd27074c5446170bca Assembly-CSharp.dll:.LobbyMessager
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.InputEventHandler
 4fd8bf02e3089425d3502e26c44ba31a Unity.TextMeshPro.dll:TMPro.TextContainer

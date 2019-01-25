@@ -2,91 +2,122 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using UnityEngine;
 
-public class Net
+public class Net : MonoBehaviour
 {
-    public readonly short localPort = 8080;
-    public readonly short targetPort = 8080;
+    public short localPort = 8080;
+    public short targetPort = 8080;
+    public string targetIp; // Opponent's address
+    public bool Server { get; set; }
 
-    private INetSerializer serializer; // Parses bytestreams
-    private readonly bool server; // Is this user a server?
-    private readonly string targetIp; // Opponent's address
-    private Socket listenerSocket; // Listens for connection requests
+    private const string localIp = "127.0.0.1";
+    private Socket serverSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
     private BufferedStream stream; // Wraps socket for data retrieval
     private readonly byte[] readBuffer = new byte[5000];
 
-    public Net(INetSerializer serializer, bool server, string targetIp, short targetPort)
+    public void Listen()
     {
-        this.serializer = serializer;
-        this.server = server;
-        this.targetIp = targetIp;
-        this.targetPort = targetPort;
-    }
+        IPAddress myIpa = IPAddress.Parse(localIp);
+        IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
 
-    // Testing without serializer
-    public Net(bool server, string targetIp, short targetPort)
-    {
-        this.server = server;
-        this.targetIp = targetIp;
-        this.targetPort = targetPort;
-    }
+        IPAddress oIpa = IPAddress.Parse(localIp);
+        IPEndPoint oIpe = new IPEndPoint(oIpa, localPort);
 
-    public void Listen(int port)
-    {
-        IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-        IPAddress localIp = ipHostInfo.AddressList[0];
-        IPEndPoint localEndPoint = new IPEndPoint(localIp, localPort);
-
-        if (server)
+        if (Server)
         {
-            listenerSocket = new Socket(localIp.AddressFamily,
+            Debug.Log("Server");
+
+            serverSocket = new Socket(myIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            listenerSocket.Bind(localEndPoint);
-            listenerSocket.Listen(100);
-            listenerSocket.BeginAccept(OnListenerConnect, null);
+            serverSocket.Bind(myIpe);
+            serverSocket.Listen(100);
+            serverSocket.BeginAccept(OnEndAccept, null);
         }
         else
         {
-            clientSocket = new Socket(localIp.AddressFamily,
+            Debug.Log("Client");
+
+            clientSocket = new Socket(myIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.BeginConnect(new IPEndPoint(IPAddress.Parse(targetIp), targetPort), OnEndConnect, null);
+            clientSocket.BeginConnect(oIpe, OnEndConnect, null);
         }
     }
 
-    protected void OnListenerConnect(IAsyncResult ar)
+    protected void OnEndAccept(IAsyncResult ar)
     {
-        Socket temp = listenerSocket.EndAccept(ar);
+        Debug.Log("Received request");
 
-        // Accept only client provided by matchmaking
-        if (temp.RemoteEndPoint.ToString() == targetIp)
-        {
-            clientSocket = temp;
-            clientSocket.NoDelay = true; // Improve performance
-            stream = new BufferedStream(new NetworkStream(clientSocket));
-        }
-        else
-        {
-            temp.Close();
-        }
+        clientSocket = serverSocket.EndAccept(ar);
+        clientSocket.NoDelay = true; // Improve performance
+
+        stream = new BufferedStream(new NetworkStream(clientSocket));
+        stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
+
+        Debug.Log("Accepted client");
     }
 
     private void OnEndConnect(IAsyncResult ar)
     {
         clientSocket.EndConnect(ar);
+        clientSocket.NoDelay = true; // Improve performance
+
+        stream = new BufferedStream(new NetworkStream(clientSocket));
+        stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
+
+        Debug.Log("Connected to server");
     }
 
-    public void OnDisconnect(IAsyncResult ar)
+    private void OnRead(IAsyncResult ar)
     {
+        Debug.Log("Received");
+
+        int length = stream.EndRead(ar);
+
+        if (length <= 0)
+        {
+            Debug.Log("Client disconnected");
+            OnDisconnect();
+        }
+        else
+        {
+            Debug.Log(readBuffer[0]);
+            Debug.Log(BitConverter.ToInt16(readBuffer, 1));
+            Debug.Log(readBuffer[3]);
+        }
+
+        stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
+    }
+
+    public void OnDisconnect()
+    {
+        clientSocket.Shutdown(SocketShutdown.Both);
         stream.Dispose();
         clientSocket = null;
     }
 
-    public void Send(short type, int length, byte[] data)
+    public void Send(byte type, short length, byte[] body)
     {
-        // Must send type, length first but still asynchronously
-        stream.WriteAsync(BitConverter.GetBytes(type), 0, 2);
-        stream.WriteAsync(BitConverter.GetBytes(length), 0, 4);
-        stream.WriteAsync(data, 0, 4);
+        byte[] lengthBytes = BitConverter.GetBytes(length);
+
+        byte[] data = new byte[1 + 2 + length];
+
+        data[0] = type;
+        data[1] = lengthBytes[0];
+        data[2] = lengthBytes[1];
+
+        for (int i = 3; i < data.Length; i++)
+            data[i] = body[i - 3];
+
+        clientSocket.BeginSend(data, 0, data.Length, 0, null, null);
+
+        Console.WriteLine("Sent message");
+    }
+
+    public void SendTest()
+    {
+        short length = 1;
+        Send(0, length, new byte[] { 2 });
     }
 }

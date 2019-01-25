@@ -30,13 +30,13 @@ public class Client
     {
         int length = stream.EndRead(ar);
 
-        if (length <= 0)
-            net.OnDisconnect(ar);
-        else
-        {
-            // Process message
-            // Prepare to read more
-            stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
-        }
+        //if (length <= 0)
+        //    net.OnDisconnect(ar);
+        //else
+        //{
+        //    // Process message
+        //    // Prepare to read more
+        //    stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
+        //}
     }
 }
