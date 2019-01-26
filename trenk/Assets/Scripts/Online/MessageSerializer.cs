@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using ZeroFormatter;
-using ZeroFormatter.Formatters;
+﻿using System;
 
 public class MessageSerializer : INetSerializer
 {
@@ -17,20 +12,28 @@ public class MessageSerializer : INetSerializer
     public bool Receive(byte type, byte[] data)
     {
         Message message = null;
+        bool result = true;
 
-        switch (type)
+        try
         {
-            case (byte) Message.Type.PING:
+            switch (type)
+            {
+                case (byte)Message.MessageType.INPUT:
+                    message = new Message(Message.MessageType.INPUT, new InputMessage(BitConverter.ToInt16(data, 0), data[2]));
+                    break;
+                case (byte)Message.MessageType.COUNT:
 
-                break;
-            case (byte) Message.Type.COUNT:
+                    break;
+                case (byte)Message.MessageType.PING:
 
-                break;
-            case (byte)Message.Type.INPUT:
-
-                break;
+                    break;
+            }
+        }
+        catch (Exception)
+        {
+            result = false;
         }
 
-        return false;
+        return result;
     }
 }

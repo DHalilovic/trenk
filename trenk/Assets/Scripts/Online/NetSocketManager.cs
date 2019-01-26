@@ -89,18 +89,20 @@ public class NetSocketManager
     {
         Debug.Log("Received");
 
-        int length = stream.EndRead(ar);
+        int readLength = stream.EndRead(ar);
 
-        if (length <= 0)
+        if (readLength <= 0)
         {
             Debug.Log("Client disconnected");
             OnDisconnect();
         }
         else
         {
-            Debug.Log(readBuffer[0]);
-            Debug.Log(BitConverter.ToInt16(readBuffer, 1));
-            Debug.Log(readBuffer[3]);
+            short bodyLength = BitConverter.ToInt16(readBuffer, 1);
+            byte[] body = new byte[bodyLength];
+            Array.Copy(readBuffer, 3, body, 0, bodyLength);
+            
+            serializer.Receive(readBuffer[0], body);
         }
 
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);

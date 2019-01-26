@@ -73,11 +73,13 @@
     <Compile Include="Assets\Scripts\Menu\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Online\Client.cs" />
     <Compile Include="Assets\Scripts\Online\INetSerializer.cs" />
+    <Compile Include="Assets\Scripts\Online\InputMessage.cs" />
     <Compile Include="Assets\Scripts\Online\LobbyMessager.cs" />
     <Compile Include="Assets\Scripts\Online\Message.cs" />
     <Compile Include="Assets\Scripts\Online\MessageSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\NetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetRoundManager.cs" />
+    <Compile Include="Assets\Scripts\Online\NetRoundStarter.cs" />
     <Compile Include="Assets\Scripts\Online\NetSocketManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest1.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest2.cs" />

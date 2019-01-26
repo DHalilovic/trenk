@@ -20,7 +20,7 @@ public class Client
             stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
     }
 
-    public void close()
+    public void Close()
     {
         stream.Close();
         clientSocket.Close();

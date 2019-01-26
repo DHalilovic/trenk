@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NetGameManager : MonoBehaviour
 {
@@ -23,7 +21,7 @@ public class NetGameManager : MonoBehaviour
     [HideInInspector] public const byte DOWN = 2;
     [HideInInspector] public const byte LEFT = 3;
 
-    public NodeManager node { get; protected set; }
+    public NodeManager Node { get; protected set; }
     public byte[,] Board { get; protected set; } // Stores positional data in arena get 
     public int HomeScore { get; protected set; }
     public int AwayScore { get; protected set; }
@@ -62,7 +60,7 @@ public class NetGameManager : MonoBehaviour
         Board = new byte[arenaHeight, arenaHeight];
 
         // Retrieve Node GameObject
-        node = GameObject.Find("Node").GetComponent<NodeManager>();
+        Node = GameObject.Find("Node").GetComponent<NodeManager>();
 
         // Ready board and physical arena
         for (int i = 1; i < arenaHeight - 1; i++)

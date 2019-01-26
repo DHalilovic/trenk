@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(NetGameManager))]
@@ -13,8 +12,8 @@ public class NetRoundManager : MonoBehaviour, Movement
     [HideInInspector] public const byte RIGHT = 2;
 
     private NetGameManager manager;
-    private int gameStep;
-    private int cycleStep;
+    private short gameStep;
+    private short cycleStep;
     private bool turnChosen;
     private byte nextHomeMove, nextAwayMove;
     private byte hit;
@@ -31,6 +30,7 @@ public class NetRoundManager : MonoBehaviour, Movement
         {
             turnChosen = true;
             nextHomeMove = LEFT;
+            SendInput(nextHomeMove);
         }
     }
 
@@ -40,7 +40,14 @@ public class NetRoundManager : MonoBehaviour, Movement
         {
             turnChosen = true;
             nextHomeMove = RIGHT;
+            SendInput(nextHomeMove);
         }
+    }
+
+    private void SendInput(byte b)
+    {
+        byte[] sendStep = BitConverter.GetBytes(gameStep);
+        manager.Node.Net.Send((byte)Message.MessageType.INPUT, 3, new byte[] { sendStep[0], sendStep[1], b });
     }
 
     private void FixedUpdate()
@@ -53,11 +60,20 @@ public class NetRoundManager : MonoBehaviour, Movement
             //Debug.Log(gameStep);
 
             // Get message if possible
-            if (currentMessage == null && manager.node.MessageQueue.Count > 0)
+            if (currentMessage == null && manager.Node.MessageQueue.Count > 0)
             {
-                currentMessage = manager.node.MessageQueue.Dequeue();
-                // Process message
+                currentMessage = manager.Node.MessageQueue.Dequeue();
 
+                // Process message
+                if (currentMessage.Type == Message.MessageType.INPUT)
+                {
+                    InputMessage body = (InputMessage) currentMessage.Body;
+
+                    short awayGameStep = body.GameStep;
+                    nextAwayMove = body.Direction;
+                }
+                else
+                    currentMessage = null;
             }
         }
         else
@@ -122,7 +138,7 @@ public class NetRoundManager : MonoBehaviour, Movement
             cycleStep = 0; // Reset cycle progress
 
             // Reset input polling
-            nextHomeMove = STRAIGHT;
+            nextHomeMove = nextAwayMove = STRAIGHT;
             turnChosen = false;
 
             // Discard current message
