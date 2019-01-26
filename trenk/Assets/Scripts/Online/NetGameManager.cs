@@ -23,6 +23,7 @@ public class NetGameManager : MonoBehaviour
     [HideInInspector] public const byte DOWN = 2;
     [HideInInspector] public const byte LEFT = 3;
 
+    public NodeManager node { get; protected set; }
     public byte[,] Board { get; protected set; } // Stores positional data in arena get 
     public int HomeScore { get; protected set; }
     public int AwayScore { get; protected set; }
@@ -59,6 +60,9 @@ public class NetGameManager : MonoBehaviour
     {
         // Initialize underlying arena
         Board = new byte[arenaHeight, arenaHeight];
+
+        // Retrieve Node GameObject
+        node = GameObject.Find("Node").GetComponent<NodeManager>();
 
         // Ready board and physical arena
         for (int i = 1; i < arenaHeight - 1; i++)

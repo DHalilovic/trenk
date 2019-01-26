@@ -8,7 +8,7 @@ public class NetSocketManager
 {
     public short localPort = 8080; // Local port
     public short targetPort = 8080; // Opponent's port
-    public string targetIp; // Opponent's address
+    public string targetIp = "127.0.0.1"; // Opponent's address
     public bool Host { get; set; } // Is this hosting or joining a game?
 
     private const string localIp = "127.0.0.1"; // Local address
@@ -28,8 +28,8 @@ public class NetSocketManager
         IPAddress myIpa = IPAddress.Parse(localIp);
         IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
 
-        IPAddress oIpa = IPAddress.Parse(localIp);
-        IPEndPoint oIpe = new IPEndPoint(oIpa, localPort);
+        IPAddress oIpa = IPAddress.Parse(targetIp);
+        IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
 
         if (Host)
         {

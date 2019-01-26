@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Message
 {
-    
+    public enum Type : byte
+    {
+        PING = 0, COUNT, INPUT 
+    }
 }

@@ -81,7 +81,7 @@
     <Compile Include="Assets\Scripts\Online\NetSocketManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest1.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest2.cs" />
-    <Compile Include="Assets\Scripts\Online\Node.cs" />
+    <Compile Include="Assets\Scripts\Online\NodeManager.cs" />
     <Compile Include="Assets\Scripts\Online\QueueEntry.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
