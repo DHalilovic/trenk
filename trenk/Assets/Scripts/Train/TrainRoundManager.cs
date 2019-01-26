@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TrainGameStarter))]
+[RequireComponent(typeof(TrainGameManager))]
 public class TrainRoundManager : MonoBehaviour, Movement
 {
-    private TrainGameStarter starter;
+    private TrainGameManager starter;
     private int framesPerStep;
     private int gameStep;
     private int cycleStep;
@@ -13,7 +13,7 @@ public class TrainRoundManager : MonoBehaviour, Movement
 
     private void Start()
     {
-        starter = GetComponent<TrainGameStarter>();
+        starter = GetComponent<TrainGameManager>();
         framesPerStep = starter.framesPerStep;
     }
 

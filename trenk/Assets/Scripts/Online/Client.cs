@@ -3,12 +3,12 @@ using System.Net.Sockets;
 
 public class Client
 {
-    private readonly Net net;
+    private readonly NetTest2 net;
     private readonly Socket clientSocket;
     private readonly NetworkStream stream;
     private readonly byte[] readBuffer = new byte[5000];
 
-    public Client(Net net, bool host)
+    public Client(NetTest2 net, bool host)
     {
         this.net = net;
         //this.clientSocket = net.ClientSocket;
