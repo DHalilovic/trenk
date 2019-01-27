@@ -1,15 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class LobbyMessager : MonoBehaviour
 {
-    public string serverUrl;
+    public string HostEvent, ClientEvent;
+    public string lobbyUrl;
     public int timeout;
-
-    private string hostUrl;
-    public string HostUrl { get { return hostUrl; } }
+    public string HostUrl { get; private set; }
 
     public void GetRandomHost()
     {
@@ -28,7 +28,7 @@ public class LobbyMessager : MonoBehaviour
 
     IEnumerator GetRandomHostCo()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(serverUrl))
+        using (UnityWebRequest www = UnityWebRequest.Get(lobbyUrl))
         {
             www.timeout = 1;
             Debug.Log("Sending...");
@@ -41,15 +41,21 @@ public class LobbyMessager : MonoBehaviour
             }
             else
             {
-                hostUrl = www.downloadHandler.text;
-                Debug.Log("Received " + hostUrl);
+                HostUrl = www.downloadHandler.text;
+                Debug.Log("Received " + HostUrl);
+
+                int colonPos = HostUrl.LastIndexOf(':');
+
+                EventManager.Instance.Raise("client",
+                    new IpParam(HostUrl.Substring(0, colonPos), short.Parse(HostUrl.Substring(colonPos + 1)))
+                );
             }
         }
     }
 
     IEnumerator AddSelfHostCo()
     {
-        using (UnityWebRequest www = UnityWebRequest.Post(serverUrl, new WWWForm()))
+        using (UnityWebRequest www = UnityWebRequest.Post(lobbyUrl, new WWWForm()))
         {
             www.timeout = timeout;
             Debug.Log("Sending...");
@@ -69,7 +75,7 @@ public class LobbyMessager : MonoBehaviour
 
     IEnumerator RemoveSelfHostCo()
     {
-        using (UnityWebRequest www = UnityWebRequest.Delete(serverUrl))
+        using (UnityWebRequest www = UnityWebRequest.Delete(lobbyUrl))
         {
             www.timeout = 1;
             Debug.Log("Sending...");
@@ -86,8 +92,4 @@ public class LobbyMessager : MonoBehaviour
             }
         }
     }
-
-
-
-
 }

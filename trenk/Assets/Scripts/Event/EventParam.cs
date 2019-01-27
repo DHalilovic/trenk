@@ -1,20 +1,30 @@
 ﻿
-public class StartListenEventParam : IEventParam
+public class BoolParam : IEventParam
 {
-    public bool host;
+    public bool val;
 
-    public StartListenEventParam(bool host)
+    public BoolParam(bool val)
     {
-        this.host = host;
+        this.val = val;
     }
 }
 
-public class PlayerFoundEventParam : IEventParam
+public class IntParam : IEventParam
+{
+    public int val;
+
+    public IntParam(int val)
+    {
+        this.val = val;
+    }
+}
+
+public class IpParam : IEventParam
 {
     public string ip;
     public short port;
 
-    public PlayerFoundEventParam(string ip, short port)
+    public IpParam(string ip, short port)
     {
         this.ip = ip;
         this.port = port;

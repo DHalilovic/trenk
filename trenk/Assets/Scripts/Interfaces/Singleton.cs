@@ -5,12 +5,13 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : Component
 {
     private static T instance;
+    public static bool Spawnable { get; protected set; }
 
     public static T Instance
     {
         get
         {
-            if (instance == null)
+            if (Spawnable && instance == null)
             {
                 instance = FindObjectOfType<T>();
 
@@ -28,6 +29,8 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
     protected virtual void Awake()
     {
+        Spawnable = true;
+
         if (instance == null)
         {
             instance = this as T;
@@ -37,5 +40,10 @@ public class Singleton<T> : MonoBehaviour where T : Component
         {
             Destroy(gameObject);
         }
+    }
+
+    protected void OnDestroy()
+    {
+        Spawnable = false;
     }
 }

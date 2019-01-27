@@ -10,49 +10,42 @@ public class EventManager : Singleton<EventManager>
     protected override void Awake()
     {
         base.Awake();
-        Init();
+        events = new Dictionary<string, Action<IEventParam>>();
     }
 
-    protected void Init()
+    public void Subscribe(string eventName, Action<IEventParam> listener)
     {
-        if (events == null)
-            events = new Dictionary<string, Action<IEventParam>>();
-    }
-
-    public static void Subscribe(string eventName, Action<IEventParam> listener)
-    {
-        if (Instance.events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
+        if (events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
         {
             // Add more events to existing one
             thisEvent += listener;
 
             // Update dict
-            Instance.events[eventName] = thisEvent;
+            events[eventName] = thisEvent;
         }
         else
         {
             // Add event to dict for first time
             thisEvent += listener;
-            Instance.events.Add(eventName, thisEvent);
+            events.Add(eventName, thisEvent);
         }
     }
 
-    public static void Unsubscribe(string eventName, Action<IEventParam> listener)
+    public void Unsubscribe(string eventName, Action<IEventParam> listener)
     {
-        if (Instance != null
-            && Instance.events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
+        if (events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
         {
             //Remove event from existing one
             thisEvent -= listener;
 
             //Update dict
-            Instance.events[eventName] = thisEvent;
+            events[eventName] = thisEvent;
         }
     }
 
-    public static void Raise(string eventName, IEventParam eventParam)
+    public void Raise(string eventName, IEventParam eventParam)
     {
-        if (Instance.events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
+        if (events.TryGetValue(eventName, out Action<IEventParam> thisEvent))
             thisEvent.Invoke(eventParam);
     }
 }

@@ -6,7 +6,7 @@ public class NodeManager : Singleton<NodeManager>
     public NetSocketManager Net { get; protected set; } // Manages client connections
     public Queue<Message> MessageQueue { get; protected set; }
 
-    private Action<IEventParam> searchGameListener, playerFoundListener;
+    private Action<IEventParam> hostListener, clientListener, connectListener;
 
     protected override void Awake()
     {
@@ -17,28 +17,46 @@ public class NodeManager : Singleton<NodeManager>
         Net = new NetSocketManager(new MessageSerializer(this));
 
         // Initialize listeners
-        playerFoundListener = new Action<IEventParam>(OnSearchGame);
-        playerFoundListener = new Action<IEventParam>(OnPlayerFound);
+        hostListener = new Action<IEventParam>(OnHost);
+        clientListener = new Action<IEventParam>(OnClient);
+        connectListener = new Action<IEventParam>(OnConnect);
     }
 
     private void OnEnable()
     {
-        EventManager.Subscribe("searchgame", OnSearchGame);
-        EventManager.Subscribe("playerfound", OnPlayerFound);
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Subscribe("host", OnHost);
+            EventManager.Instance.Subscribe("client", OnClient);
+            EventManager.Instance.Subscribe("connect", OnConnect);
+        }
     }
 
     private void OnDisable()
     {
-        EventManager.Unsubscribe("searchgame", OnSearchGame);
-        EventManager.Unsubscribe("playerfound", OnPlayerFound);
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Unsubscribe("host", OnHost);
+            EventManager.Instance.Unsubscribe("client", OnClient);
+            EventManager.Instance.Unsubscribe("connect", OnConnect);
+        }
     }
 
-    private void OnSearchGame(IEventParam e)
+    private void OnHost(IEventParam e)
     {
 
     }
 
-    private void OnPlayerFound(IEventParam e)
+    private void OnClient(IEventParam e)
+    {
+
+    }
+
+    private void OnConnect(IEventParam e)
     {
 
     }
