@@ -9,11 +9,11 @@ public class LobbyMessager : MonoBehaviour
     public int timeout;
 
     private string hostUrl;
-    public string HostUrl{get { return hostUrl; } }
+    public string HostUrl { get { return hostUrl; } }
 
     public void GetRandomHost()
     {
-
+        StartCoroutine(GetRandomHostCo());
     }
 
     public void AddSelfHost()

@@ -17,7 +17,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     private bool moveChosen;
     private byte nextHomeMove, nextAwayMove;
     private byte hit;
-    private Message currentMessage;
+    private Message currentInputMessage;
 
     private void Start()
     {
@@ -52,36 +52,35 @@ public class NetRoundManager : MonoBehaviour, Movement
 
     private void FixedUpdate()
     {
-        // Send last-minute "straight" message if no move chosen
-        if (cycleStep == framesPerStep - 1 && !moveChosen)
-            SendInput(nextHomeMove);
+        // Get message if possible
+        if (currentInputMessage == null && manager.Node.MessageQueue.Count > 0)
+        {
+            currentInputMessage = manager.Node.MessageQueue.Dequeue();
+
+            // Process or discard message
+            if (currentInputMessage.Type == Message.MessageType.INPUT)
+            {
+                InputMessage body = (InputMessage)currentInputMessage.Body;
+                nextAwayMove = body.Direction;
+            }
+            else
+                currentInputMessage = null;
+        }
 
         // Wait for player inputs for some frames
-        if (currentMessage == null || cycleStep < framesPerStep - 1)
+        if (cycleStep < framesPerStep - 1)
         {
             // Increment cycle progress
             cycleStep++;
-
-            //Debug.Log(gameStep);
-
-            // Get message if possible
-            if (currentMessage == null && manager.Node.MessageQueue.Count > 0)
-            {
-                currentMessage = manager.Node.MessageQueue.Dequeue();
-
-                // Process message
-                if (currentMessage.Type == Message.MessageType.INPUT)
-                {
-                    InputMessage body = (InputMessage)currentMessage.Body;
-
-                    short awayGameStep = body.GameStep;
-                    nextAwayMove = body.Direction;
-                }
-                else
-                    currentMessage = null;
-            }
         }
-        else
+        else if (cycleStep == framesPerStep - 1 && !moveChosen)
+        {
+            // Send last-minute "straight" message if no local input received
+            SendInput(nextHomeMove);
+        }
+
+        // Move board only when message received and current cycle completed
+        if (currentInputMessage != null && cycleStep >= framesPerStep - 1)
         {
             byte homeRot = 0, awayRot = 0;
 
@@ -138,6 +137,7 @@ public class NetRoundManager : MonoBehaviour, Movement
 
                 // Call for end of round
                 //manager.OnRoundEnd.Raise();
+                this.enabled = false;
             }
 
             cycleStep = 0; // Reset cycle progress
@@ -147,7 +147,7 @@ public class NetRoundManager : MonoBehaviour, Movement
             moveChosen = false;
 
             // Discard current message
-            currentMessage = null;
+            currentInputMessage = null;
 
             // Increment overall frame counter
             gameStep++;
