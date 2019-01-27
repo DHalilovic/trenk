@@ -14,7 +14,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     private NetGameManager manager;
     private short gameStep;
     private short cycleStep;
-    private bool turnChosen;
+    private bool moveChosen;
     private byte nextHomeMove, nextAwayMove;
     private byte hit;
     private Message currentMessage;
@@ -26,9 +26,9 @@ public class NetRoundManager : MonoBehaviour, Movement
 
     public void OnLeft()
     {
-        if (!turnChosen)
+        if (!moveChosen)
         {
-            turnChosen = true;
+            moveChosen = true;
             nextHomeMove = LEFT;
             SendInput(nextHomeMove);
         }
@@ -36,9 +36,9 @@ public class NetRoundManager : MonoBehaviour, Movement
 
     public void OnRight()
     {
-        if (!turnChosen)
+        if (!moveChosen)
         {
-            turnChosen = true;
+            moveChosen = true;
             nextHomeMove = RIGHT;
             SendInput(nextHomeMove);
         }
@@ -52,10 +52,15 @@ public class NetRoundManager : MonoBehaviour, Movement
 
     private void FixedUpdate()
     {
+        // Send last-minute "straight" message if no move chosen
+        if (cycleStep == framesPerStep - 1 && !moveChosen)
+            SendInput(nextHomeMove);
+
         // Wait for player inputs for some frames
-        if (cycleStep < framesPerStep || currentMessage == null)
+        if (currentMessage == null || cycleStep < framesPerStep - 1)
         {
-            cycleStep++; // Increment cycle progress
+            // Increment cycle progress
+            cycleStep++;
 
             //Debug.Log(gameStep);
 
@@ -67,7 +72,7 @@ public class NetRoundManager : MonoBehaviour, Movement
                 // Process message
                 if (currentMessage.Type == Message.MessageType.INPUT)
                 {
-                    InputMessage body = (InputMessage) currentMessage.Body;
+                    InputMessage body = (InputMessage)currentMessage.Body;
 
                     short awayGameStep = body.GameStep;
                     nextAwayMove = body.Direction;
@@ -139,7 +144,7 @@ public class NetRoundManager : MonoBehaviour, Movement
 
             // Reset input polling
             nextHomeMove = nextAwayMove = STRAIGHT;
-            turnChosen = false;
+            moveChosen = false;
 
             // Discard current message
             currentMessage = null;
