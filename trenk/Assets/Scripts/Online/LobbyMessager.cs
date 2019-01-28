@@ -6,8 +6,7 @@ using UnityEngine.Networking;
 
 public class LobbyMessager : MonoBehaviour
 {
-    public string HostEvent, ClientEvent;
-    public string lobbyUrl;
+    public string lobbyUrl = "http://127.0.0.1:8080";
     public int timeout;
     public string HostUrl { get; private set; }
 
@@ -46,8 +45,8 @@ public class LobbyMessager : MonoBehaviour
 
                 int colonPos = HostUrl.LastIndexOf(':');
 
-                EventManager.Instance.Raise("client",
-                    new IpParam(HostUrl.Substring(0, colonPos), short.Parse(HostUrl.Substring(colonPos + 1)))
+                EventManager.Instance.Raise("try-connect",
+                    new IpParam(false, HostUrl.Substring(0, colonPos), short.Parse(HostUrl.Substring(colonPos + 1)))
                 );
             }
         }

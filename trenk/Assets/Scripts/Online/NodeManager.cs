@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class NodeManager : Singleton<NodeManager>
 {
     public NetSocketManager Net { get; protected set; } // Manages client connections
     public Queue<Message> MessageQueue { get; protected set; }
 
-    private Action<IEventParam> hostListener, clientListener, connectListener;
+    private Action<IEventParam> tryConnectListener;
 
     protected override void Awake()
     {
@@ -17,9 +18,7 @@ public class NodeManager : Singleton<NodeManager>
         Net = new NetSocketManager(new MessageSerializer(this));
 
         // Initialize listeners
-        hostListener = new Action<IEventParam>(OnHost);
-        clientListener = new Action<IEventParam>(OnClient);
-        connectListener = new Action<IEventParam>(OnConnect);
+        tryConnectListener = new Action<IEventParam>(OnTryConnect);
     }
 
     private void OnEnable()
@@ -28,9 +27,7 @@ public class NodeManager : Singleton<NodeManager>
 
         if (e != null)
         {
-            EventManager.Instance.Subscribe("host", OnHost);
-            EventManager.Instance.Subscribe("client", OnClient);
-            EventManager.Instance.Subscribe("connect", OnConnect);
+            EventManager.Instance.Subscribe("try-connect", tryConnectListener);
         }
     }
 
@@ -40,24 +37,20 @@ public class NodeManager : Singleton<NodeManager>
 
         if (e != null)
         {
-            EventManager.Instance.Unsubscribe("host", OnHost);
-            EventManager.Instance.Unsubscribe("client", OnClient);
-            EventManager.Instance.Unsubscribe("connect", OnConnect);
+            EventManager.Instance.Unsubscribe("try-connect", tryConnectListener);
         }
     }
 
-    private void OnHost(IEventParam e)
+    private void OnTryConnect(IEventParam e)
     {
+        IpParam p = (IpParam)e;
 
+        Net.Host = p.host;
+        Net.targetIp = p.ip;
+        Net.targetPort = p.port;
+        Net.Listen();
+
+        Debug.Log("Try connect as " + (p.host ? "host" : "client"));
     }
 
-    private void OnClient(IEventParam e)
-    {
-
-    }
-
-    private void OnConnect(IEventParam e)
-    {
-
-    }
 }

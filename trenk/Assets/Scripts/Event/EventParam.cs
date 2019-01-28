@@ -21,11 +21,13 @@ public class IntParam : IEventParam
 
 public class IpParam : IEventParam
 {
+    public bool host;
     public string ip;
     public short port;
 
-    public IpParam(string ip, short port)
+    public IpParam(bool host, string ip, short port)
     {
+        this.host = false;
         this.ip = ip;
         this.port = port;
     }

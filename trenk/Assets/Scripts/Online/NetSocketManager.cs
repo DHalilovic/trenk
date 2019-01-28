@@ -72,6 +72,7 @@ public class NetSocketManager
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         Debug.Log("Accepted client");
+        EventManager.Instance.Raise("connect", new BoolParam(true));
     }
 
     private void OnEndConnect(IAsyncResult ar)
@@ -83,6 +84,7 @@ public class NetSocketManager
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         Debug.Log("Connected to server");
+        EventManager.Instance.Raise("connect", new BoolParam(false));
     }
 
     private void OnRead(IAsyncResult ar)
