@@ -40,6 +40,6 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private void OnConnect(IEventParam e)
     {
-
+        LoadScene(2); // Load multiplayer arena
     }
 }

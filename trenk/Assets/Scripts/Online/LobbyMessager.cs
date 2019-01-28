@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,6 +8,33 @@ public class LobbyMessager : MonoBehaviour
     public string lobbyUrl = "http://127.0.0.1:8080";
     public int timeout;
     public string HostUrl { get; private set; }
+
+    private Action<IEventParam> connectListener;
+
+    private void Awake()
+    {
+        connectListener = new Action<IEventParam>(OnConnect);
+    }
+
+    private void OnEnable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Subscribe("try-connect", connectListener);
+        }
+    }
+
+    private void OnDisable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Unsubscribe("try-connect", connectListener);
+        }
+    }
 
     public void GetRandomHost()
     {
@@ -25,11 +51,20 @@ public class LobbyMessager : MonoBehaviour
         StartCoroutine(RemoveSelfHostCo());
     }
 
+    private void OnConnect(IEventParam e)
+    {
+        BoolParam p = (BoolParam) e;
+        
+        // If host, remove own ip from server list
+        if (p.val)
+            RemoveSelfHost();
+    }
+
     IEnumerator GetRandomHostCo()
     {
         using (UnityWebRequest www = UnityWebRequest.Get(lobbyUrl))
         {
-            www.timeout = 1;
+            www.timeout = timeout;
             Debug.Log("Sending...");
             yield return www.SendWebRequest();
             Debug.Log("Get Sent");

@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac787928c7b5949a4ac9e49e515847fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyUrl: http://127.0.0.1:8080
+  lobbyUrl: http://71.114.155.111:8080/hosted
   timeout: 2
 --- !u!114 &107253952
 MonoBehaviour:
