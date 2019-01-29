@@ -6,61 +6,16 @@ using UnityEngine.Networking;
 public class LobbyMessager : MonoBehaviour
 {
     public string lobbyUrl = "http://127.0.0.1:8080";
+    public short defaultPort = 8080;
+
     public int timeout;
-    public string HostUrl { get; private set; }
 
-    private Action<IEventParam> connectListener;
-
-    private void Awake()
+    public void GetHost()
     {
-        connectListener = new Action<IEventParam>(OnConnect);
+        StartCoroutine(GetHostCo());
     }
 
-    private void OnEnable()
-    {
-        EventManager e = EventManager.Instance;
-
-        if (e != null)
-        {
-            EventManager.Instance.Subscribe("try-connect", connectListener);
-        }
-    }
-
-    private void OnDisable()
-    {
-        EventManager e = EventManager.Instance;
-
-        if (e != null)
-        {
-            EventManager.Instance.Unsubscribe("try-connect", connectListener);
-        }
-    }
-
-    public void GetRandomHost()
-    {
-        StartCoroutine(GetRandomHostCo());
-    }
-
-    public void AddSelfHost()
-    {
-        StartCoroutine(AddSelfHostCo());
-    }
-
-    public void RemoveSelfHost()
-    {
-        StartCoroutine(RemoveSelfHostCo());
-    }
-
-    private void OnConnect(IEventParam e)
-    {
-        BoolParam p = (BoolParam) e;
-        
-        // If host, remove own ip from server list
-        if (p.val)
-            RemoveSelfHost();
-    }
-
-    IEnumerator GetRandomHostCo()
+    IEnumerator GetHostCo()
     {
         using (UnityWebRequest www = UnityWebRequest.Get(lobbyUrl))
         {
@@ -72,57 +27,26 @@ public class LobbyMessager : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                EventManager.Instance.Raise("lobby-error", new StringParam(www.error));
             }
             else
             {
-                HostUrl = www.downloadHandler.text;
-                Debug.Log("Received " + HostUrl);
+                string url = www.downloadHandler.text;
+                Debug.Log("Received " + url);
 
-                int colonPos = HostUrl.LastIndexOf(':');
+                // If no url received, this system is to host
+                if (string.IsNullOrEmpty(url))
+                {
+                    Debug.Log("___Host");
 
-                EventManager.Instance.Raise("try-connect",
-                    new IpParam(false, HostUrl.Substring(0, colonPos), short.Parse(HostUrl.Substring(colonPos + 1)))
-                );
-            }
-        }
-    }
+                    EventManager.Instance.Raise("try-connect", new IpParam(true, url, defaultPort));
+                }
+                else // Otherwise request connecting to provided host
+                {
+                    Debug.Log("___Client");
 
-    IEnumerator AddSelfHostCo()
-    {
-        using (UnityWebRequest www = UnityWebRequest.Post(lobbyUrl, new WWWForm()))
-        {
-            www.timeout = timeout;
-            Debug.Log("Sending...");
-            yield return www.SendWebRequest();
-            Debug.Log("Post Sent");
-
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Posted");
-            }
-        }
-    }
-
-    IEnumerator RemoveSelfHostCo()
-    {
-        using (UnityWebRequest www = UnityWebRequest.Delete(lobbyUrl))
-        {
-            www.timeout = 1;
-            Debug.Log("Sending...");
-            yield return www.SendWebRequest();
-            Debug.Log("Delete Sent");
-
-            if (www.isNetworkError || www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Deleted");
+                    EventManager.Instance.Raise("try-connect", new IpParam(false, url, defaultPort));
+                }
             }
         }
     }

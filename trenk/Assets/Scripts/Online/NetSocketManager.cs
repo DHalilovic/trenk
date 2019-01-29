@@ -28,12 +28,9 @@ public class NetSocketManager
         IPAddress myIpa = IPAddress.Parse(localIp);
         IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
 
-        IPAddress oIpa = IPAddress.Parse(targetIp);
-        IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
-
         if (Host)
         {
-            Debug.Log("Server");
+            Debug.Log("Host");
 
             serverSocket = new Socket(myIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
@@ -44,6 +41,9 @@ public class NetSocketManager
         else
         {
             Debug.Log("Client");
+
+            IPAddress oIpa = IPAddress.Parse(targetIp);
+            IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
 
             clientSocket = new Socket(myIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);

@@ -19,6 +19,16 @@ public class IntParam : IEventParam
     }
 }
 
+public class StringParam : IEventParam
+{
+    public string val;
+
+    public StringParam(string val)
+    {
+        this.val = val;
+    }
+}
+
 public class IpParam : IEventParam
 {
     public bool host;
@@ -27,7 +37,7 @@ public class IpParam : IEventParam
 
     public IpParam(bool host, string ip, short port)
     {
-        this.host = false;
+        this.host = host;
         this.ip = ip;
         this.port = port;
     }
