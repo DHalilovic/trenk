@@ -4,29 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(ITransitioner))]
+[RequireComponent(typeof(Transitioner))]
 public class MainMenuManager : MonoBehaviour
 {
     public LobbyMessenger messenger;
     public GameObject mainCanvas;
     public Button matchButton, trainButton;
-    public GameObject connectingCanvas;
-    public Text connectingText;
+    public GameObject connectCanvas;
+    public Text connectText;
     public Button errorConfirmButton;
 
-    private ITransitioner transitioner;
+    private Transitioner transitioner;
+    private Transitionable mainTrans, connectTrans;
     private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onConnectErrorListener;
 
 
     private void Awake()
     {
-        transitioner = GetComponent<ITransitioner>();
         onLobbyErrorListener = new Action<IEventParam>(
             (e) =>
             {
-                connectingText.text = "Error: " + ((StringParam)e).val;
+                connectText.text = "Error: " + ((StringParam)e).val;
                 errorConfirmButton.gameObject.SetActive(true);
             });
+        onTryConnectListener = new Action<IEventParam>(
+            (e) =>
+            {
+                IpParam p = (IpParam)e;
+
+                connectText.text = (p.host) ? "Connecting to " + p.ip : "Hosting match";
+            });
+
+        transitioner = GetComponent<Transitioner>();
+        mainTrans = mainCanvas.GetComponent<Transitionable>();
+        connectTrans = connectCanvas.GetComponent<Transitionable>();
     }
 
     private void OnEnable()
@@ -35,9 +46,9 @@ public class MainMenuManager : MonoBehaviour
             () =>
             {
                 EventManager.Instance.Raise("try-lobby", new IntParam(1));
-                connectingText.text = "Reaching Lobby...";
+                connectText.text = "Reaching Lobby...";
                 errorConfirmButton.gameObject.SetActive(false);
-                OpenOneWay(mainCanvas, connectingCanvas);
+                transitioner.GoOneWay(mainTrans, connectTrans);
             });
 
         trainButton.onClick.AddListener(
@@ -46,9 +57,11 @@ public class MainMenuManager : MonoBehaviour
                 EventManager.Instance.Raise("scene", new IntParam(1));
             });
 
-        errorConfirmButton.onClick.AddListener(() => OpenOneWay(connectingCanvas, mainCanvas));
+        errorConfirmButton.onClick.AddListener(() => transitioner.GoOneWay(connectTrans, mainTrans));
 
         EventManager.Instance.Subscribe("lobby-error", onLobbyErrorListener);
+        EventManager.Instance.Subscribe("try-connect", onTryConnectListener);
+
     }
 
     private void OnDisable()
@@ -58,12 +71,8 @@ public class MainMenuManager : MonoBehaviour
         errorConfirmButton.onClick.RemoveAllListeners();
 
         EventManager.Instance.Unsubscribe("lobby-error", onLobbyErrorListener);
-
+        EventManager.Instance.Unsubscribe("try-connect", onTryConnectListener);
     }
 
-    public void OpenOneWay(GameObject origin, GameObject target)
-    {
-        transitioner.TransitionOut(origin);
-        transitioner.TransitionIn(target);
-    }
+
 }

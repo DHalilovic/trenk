@@ -72,6 +72,8 @@ public class NetSocketManager
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         Debug.Log("Accepted client");
+
+        StopListening(); // Don't listen for additional clients
         EventManager.Instance.Raise("connect", new BoolParam(true));
     }
 
