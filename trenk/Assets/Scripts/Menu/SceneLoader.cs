@@ -3,14 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
-    private Action<IEventParam> connectListener;
+    private Action<IEventParam> sceneListener;
 
     protected override void Awake()
     {
         base.Awake();
 
         // Initialize listeners
-        connectListener = new Action<IEventParam>(OnConnect);
+        sceneListener = new Action<IEventParam>(OnLoadScene);
     }
 
     private void OnEnable()
@@ -19,7 +19,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
         if (e != null)
         {
-            EventManager.Instance.Subscribe("connect", connectListener);
+            EventManager.Instance.Subscribe("scene", sceneListener);
         }
     }
 
@@ -29,7 +29,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
         if (e != null)
         {
-            EventManager.Instance.Unsubscribe("connect", connectListener);
+            EventManager.Instance.Unsubscribe("scene", sceneListener);
         }
     }
 
@@ -38,8 +38,10 @@ public class SceneLoader : Singleton<SceneLoader>
         SceneManager.LoadScene(i);
     }
 
-    private void OnConnect(IEventParam e)
+    private void OnLoadScene(IEventParam e)
     {
-        LoadScene(2); // Load multiplayer arena
+        IntParam p = (IntParam)e;
+
+        LoadScene(p.val); // Load multiplayer arena
     }
 }
