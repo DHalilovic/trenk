@@ -7,8 +7,35 @@ public class LobbyMessenger : MonoBehaviour
 {
     public string lobbyUrl = "http://127.0.0.1:8080";
     public short defaultPort = 8080;
-
     public int timeout;
+
+    private Action<IEventParam> tryLobbyListener;
+
+    private void Awake()
+    {
+        tryLobbyListener = new Action<IEventParam>((e) => GetHost());
+    }
+
+    private void OnEnable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Subscribe("try-lobby", tryLobbyListener);
+        }
+
+    }
+
+    private void OnDisable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Unsubscribe("try-lobby", tryLobbyListener);
+        }
+    }
 
     public void GetHost()
     {
