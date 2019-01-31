@@ -2,17 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class SimpleTransitionable : Transitionable
 {
+    public AnimationClip inClip, outClip;
+
+    private Animator anim;
+    private int inHash = Animator.StringToHash("FadeIn");
+    private int outHash = Animator.StringToHash("FadeOut");
+
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
+
     public override float In()
     {
-        //throw new System.NotImplementedException();
-        return 0;
+        anim.Play(inHash);
+        return inClip.length;
     }
 
     public override float Out()
     {
         //throw new System.NotImplementedException();
-        return 0;
+        anim.Play(outHash);
+        return outClip.length;
     }
 }

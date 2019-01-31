@@ -12,11 +12,16 @@ public class Transitioner : MonoBehaviour
     IEnumerator GoOneWayCo(Transitionable origin, Transitionable target)
     {
         float t = origin.Out();
+
+        //// Let origin finish before target begins
+        //yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(t);
 
         origin.gameObject.SetActive(false);
         target.gameObject.SetActive(true);
 
         target.In();
+
+        yield return null;
     }
 }
