@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class NetSocketManager
 {
-    public short localPort = 8080; // Local port
-    public short targetPort = 8080; // Opponent's port
+    public short localPort = 9999; // Local port
+    public short targetPort = 9999; // Opponent's port
     public string targetIp = "127.0.0.1"; // Opponent's address
     public bool Host { get; set; } // Is this hosting or joining a game?
 
@@ -71,10 +71,9 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
-        Debug.Log("Accepted client");
-
-        StopListening(); // Don't listen for additional clients
         EventManager.Instance.Raise("connect", new BoolParam(true));
+        Debug.Log("Accepted client");
+        StopListening(); // Don't listen for additional clients
     }
 
     private void OnEndConnect(IAsyncResult ar)
@@ -85,13 +84,13 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
-        Debug.Log("Connected to server");
         EventManager.Instance.Raise("connect", new BoolParam(false));
+        Debug.Log("Connected to server");
     }
 
     private void OnRead(IAsyncResult ar)
     {
-        Debug.Log("Received");
+        //Debug.Log("Received");
 
         int readLength = stream.EndRead(ar);
 
@@ -134,6 +133,6 @@ public class NetSocketManager
 
         clientSocket.BeginSend(data, 0, data.Length, 0, null, null);
 
-        Debug.Log("Sent message");
+        //Debug.Log("Sent message");
     }
 }

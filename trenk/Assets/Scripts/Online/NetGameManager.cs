@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class NetGameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class NetGameManager : MonoBehaviour
     public byte AwayRot { get; protected set; } // Current opponent direction
 
     protected Position homePos, awayPos; // Current positions on board
+    protected Action<IEventParam> onConnectListener;
+    protected NetRoundManager round;
 
     // Contains gameObject placement on board and in scene
     protected struct Position
@@ -52,6 +55,14 @@ public class NetGameManager : MonoBehaviour
         {
             return !(a == b);
         }
+    }
+
+    private void Awake()
+    {
+        round = GetComponent<NetRoundManager>();
+
+        // Prepare listener
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true;  Debug.Log("JA");  });
     }
 
     public virtual void Start()
@@ -90,6 +101,27 @@ public class NetGameManager : MonoBehaviour
         // Position players in scene
         HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
         AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+    }
+
+    private void OnEnable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Subscribe("connect", onConnectListener);
+            Debug.Log("Subbed");
+        }
+    }
+
+    private void OnDisable()
+    {
+        EventManager e = EventManager.Instance;
+
+        if (e != null)
+        {
+            EventManager.Instance.Unsubscribe("connect", onConnectListener);
+        }
     }
 
     // Prevent rotation from exceeding one full cycle
