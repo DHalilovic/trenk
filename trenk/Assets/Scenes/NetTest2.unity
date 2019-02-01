@@ -236,8 +236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66794dc789b1a23468cd3d01f0fd663a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localPort: 6666
-  targetPort: 6666
+  localPort: 9999
+  targetPort: 9999
   targetIp: 10.2.195.72
 --- !u!4 &102975800
 Transform:
@@ -1242,8 +1242,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5903756bcc531a54cb71f069d8b45c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1860394175

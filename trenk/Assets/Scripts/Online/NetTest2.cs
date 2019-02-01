@@ -6,12 +6,11 @@ using UnityEngine;
 
 public class NetTest2 : MonoBehaviour
 {
-    public short localPort = 8080;
-    public short targetPort = 8080;
+    public short localPort = 9999;
+    public short targetPort = 9999;
     public string targetIp; // Opponent's address
     public bool Server { get; set; }
 
-    private const string localIp = "127.0.0.1";
     private Socket serverSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
     private BufferedStream stream; // Wraps socket for data retrieval
@@ -19,7 +18,7 @@ public class NetTest2 : MonoBehaviour
 
     public void Listen()
     {
-        IPAddress myIpa = IPAddress.Parse(localIp);
+        IPAddress myIpa = IPAddress.Any;
         IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
 
         IPAddress oIpa = IPAddress.Parse(targetIp);
@@ -62,6 +61,7 @@ public class NetTest2 : MonoBehaviour
 
     private void OnEndConnect(IAsyncResult ar)
     {
+        Debug.Log("Attempting to end connect");
         clientSocket.EndConnect(ar);
         clientSocket.NoDelay = true; // Improve performance
 
