@@ -22,8 +22,8 @@ public class NetTest2 : MonoBehaviour
         IPAddress myIpa = IPAddress.Parse(localIp);
         IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
 
-        IPAddress oIpa = IPAddress.Parse(localIp);
-        IPEndPoint oIpe = new IPEndPoint(oIpa, localPort);
+        IPAddress oIpa = IPAddress.Parse(targetIp);
+        IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
 
         if (Server)
         {
@@ -34,6 +34,7 @@ public class NetTest2 : MonoBehaviour
             serverSocket.Bind(myIpe);
             serverSocket.Listen(100);
             serverSocket.BeginAccept(OnEndAccept, null);
+            Debug.Log("Listening");
         }
         else
         {
@@ -42,6 +43,7 @@ public class NetTest2 : MonoBehaviour
             clientSocket = new Socket(myIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
             clientSocket.BeginConnect(oIpe, OnEndConnect, null);
+            Debug.Log("Connecting");
         }
     }
 

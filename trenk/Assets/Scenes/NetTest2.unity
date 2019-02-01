@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: NaN, g: NaN, b: NaN, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -236,9 +236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66794dc789b1a23468cd3d01f0fd663a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localPort: 8080
-  targetPort: 8080
-  targetIp: 127.0.0.1
+  localPort: 6666
+  targetPort: 6666
+  targetIp: 10.2.195.72
 --- !u!4 &102975800
 Transform:
   m_ObjectHideFlags: 0
@@ -1231,7 +1231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1860394174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,17 +1244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5903756bcc531a54cb71f069d8b45c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugGui: {fileID: 0}
-  defaultGuiPosition: {x: 0.01, y: 0.98, z: 0}
-  defaultGuiScale: {x: 0.5, y: 0.5, z: 1}
-  normal: {r: 0, g: 1, b: 0, a: 1}
-  warning: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  error: {r: 1, g: 0, b: 0, a: 1}
-  maxMessages: 30
-  lineSpacing: 0.02
-  draggable: 1
-  visible: 1
-  pixelCorrect: 0
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1860394175
 Transform:
   m_ObjectHideFlags: 0
