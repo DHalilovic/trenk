@@ -7,7 +7,7 @@ public class NodeManager : Singleton<NodeManager>
     public NetSocketManager Net { get; protected set; } // Manages client connections
     public Queue<Message> MessageQueue { get; protected set; }
 
-    private Action<IEventParam> tryConnectListener;
+    private Action<IEventParam> tryConnectListener, tryConnectTimeoutListener;
 
     protected override void Awake()
     {
@@ -16,12 +16,26 @@ public class NodeManager : Singleton<NodeManager>
         // Initialize members
         MessageQueue = new Queue<Message>();
         Net = new NetSocketManager(new MessageSerializer(this));
-        //Net = gameObject.AddComponent<NetSocketManager>();
-        //Net.Init(new MessageSerializer(this));
-
 
         // Initialize listeners
-        tryConnectListener = new Action<IEventParam>(OnTryConnect);
+        tryConnectListener = new Action<IEventParam>((e) =>
+            {
+                IpParam p = (IpParam)e;
+
+                Net.Host = p.host;
+                Net.targetIp = p.ip;
+                Net.targetPort = p.port;
+                Net.Listen();
+
+                Debug.Log("Try connect as " + (p.host ? "host" : "client"));
+            });
+
+        tryConnectTimeoutListener =
+            new Action<IEventParam>((e) =>
+        {
+            Net.OnDisconnect();
+            Net.StopListening();
+        });
     }
 
     private void OnEnable()
@@ -31,6 +45,7 @@ public class NodeManager : Singleton<NodeManager>
         if (e != null)
         {
             EventManager.Instance.Subscribe("try-connect", tryConnectListener);
+            EventManager.Instance.Subscribe("try-connect-timeout", tryConnectTimeoutListener);
         }
     }
 
@@ -41,19 +56,7 @@ public class NodeManager : Singleton<NodeManager>
         if (e != null)
         {
             EventManager.Instance.Unsubscribe("try-connect", tryConnectListener);
+            EventManager.Instance.Unsubscribe("try-connect-timeout", tryConnectTimeoutListener);
         }
     }
-
-    private void OnTryConnect(IEventParam e)
-    {
-        IpParam p = (IpParam)e;
-
-        Net.Host = p.host;
-        Net.targetIp = p.ip;
-        Net.targetPort = p.port;
-        Net.Listen();
-
-        Debug.Log("Try connect as " + (p.host ? "host" : "client"));
-    }
-
 }

@@ -55,7 +55,7 @@ public class NetSocketManager
     {
         if (serverSocket != null)
         {
-            serverSocket.Shutdown(SocketShutdown.Both);
+           //serverSocket.Shutdown(SocketShutdown.Both);
             serverSocket.Dispose();
             serverSocket = null;
         }
@@ -113,9 +113,14 @@ public class NetSocketManager
 
     public void OnDisconnect()
     {
-        clientSocket.Shutdown(SocketShutdown.Both);
-        stream.Dispose();
-        clientSocket = null;
+        if (clientSocket != null)
+        {
+            clientSocket.Shutdown(SocketShutdown.Both);
+            clientSocket = null;
+        }
+
+        if (stream != null)
+            stream.Dispose();
     }
 
     public void Send(byte type, short length, byte[] body)

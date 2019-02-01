@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class CountdownTimer : MonoBehaviour
 {
-    public string tickEventName, completeEventName;
-    private int clockTime;
+    public int ClockTime { get; private set; }
 
-    public void Launch(int i, IEventParam onTick, IEventParam onComplete)
+    public void Launch(int i, string tickName, string completeName, IEventParam onTick, IEventParam onComplete)
     {
-        clockTime = i;
-        StartCoroutine(Tick(onTick, onComplete));
+        ClockTime = i;
+        StartCoroutine(Tick(tickName, completeName, onTick, onComplete));
     }
 
     public void Stop()
@@ -19,15 +18,15 @@ public class CountdownTimer : MonoBehaviour
         StopAllCoroutines();
     }
 
-    IEnumerator Tick(IEventParam onTick, IEventParam onComplete)
+    IEnumerator Tick(string tickName, string completeName, IEventParam onTick, IEventParam onComplete)
     {
-        while (clockTime > 0)
+        while (ClockTime > 0)
         {
-            EventManager.Instance.Raise(tickEventName, onTick);
+            EventManager.Instance.Raise(tickName, onTick);
             yield return new WaitForSeconds(1);
-            clockTime--;
+            ClockTime--;
         }
 
-        EventManager.Instance.Raise(completeEventName, onComplete);
+        EventManager.Instance.Raise(completeName, onComplete);
     }
 }

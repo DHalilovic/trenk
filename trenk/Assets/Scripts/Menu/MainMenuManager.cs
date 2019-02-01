@@ -16,7 +16,7 @@ public class MainMenuManager : MonoBehaviour
 
     private Transitioner transitioner;
     private Transitionable mainTrans, connectTrans;
-    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onConnectErrorListener;
+    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onTryConnectTimeoutListener;
 
 
     private void Awake()
@@ -27,12 +27,22 @@ public class MainMenuManager : MonoBehaviour
                 connectText.text = "Error: " + ((StringParam)e).val;
                 errorConfirmButton.gameObject.SetActive(true);
             });
+
         onTryConnectListener = new Action<IEventParam>(
             (e) =>
             {
                 IpParam p = (IpParam)e;
 
-                connectText.text = (p.host) ? "Connecting to " + p.ip : "Hosting match";
+                connectText.text = (p.host) ? "Hosting match" : "Connecting to " + p.ip;
+            });
+
+        onTryConnectTimeoutListener = new Action<IEventParam>(
+            (e) =>
+            {
+                BoolParam p = (BoolParam)e;
+
+                connectText.text = "Failed to Connect";
+                errorConfirmButton.gameObject.SetActive(true);
             });
 
         transitioner = GetComponent<Transitioner>();
@@ -61,7 +71,7 @@ public class MainMenuManager : MonoBehaviour
 
         EventManager.Instance.Subscribe("lobby-error", onLobbyErrorListener);
         EventManager.Instance.Subscribe("try-connect", onTryConnectListener);
-
+        EventManager.Instance.Subscribe("try-connect-timeout", onTryConnectTimeoutListener);
     }
 
     private void OnDisable()
@@ -72,6 +82,7 @@ public class MainMenuManager : MonoBehaviour
 
         EventManager.Instance.Unsubscribe("lobby-error", onLobbyErrorListener);
         EventManager.Instance.Unsubscribe("try-connect", onTryConnectListener);
+        EventManager.Instance.Unsubscribe("try-connect-timeout", onTryConnectTimeoutListener);
     }
 
 
