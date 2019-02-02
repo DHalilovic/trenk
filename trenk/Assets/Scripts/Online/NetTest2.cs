@@ -7,8 +7,8 @@ using UnityEngine;
 public class NetTest2 : MonoBehaviour
 {
     public short localPort = 9999;
-    public short targetPort = 9999;
-    public string targetIp; // Opponent's address
+    public short remotePort = 9999;
+    public string remoteIp; // Opponent's address
     public bool Server { get; set; }
 
     private Socket serverSocket; // Listens for connection requests
@@ -18,30 +18,33 @@ public class NetTest2 : MonoBehaviour
 
     public void Listen()
     {
-        IPAddress myIpa = IPAddress.Any;
-        IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
-
-        IPAddress oIpa = IPAddress.Parse(targetIp);
-        IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
+        IPAddress localIpa = IPAddress.Any;
 
         if (Server)
         {
+            IPEndPoint localIpe = new IPEndPoint(localIpa, localPort);
+
             Debug.Log("Server");
 
-            serverSocket = new Socket(myIpa.AddressFamily,
+            serverSocket = new Socket(localIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(myIpe);
+            serverSocket.Bind(localIpe);
             serverSocket.Listen(100);
             serverSocket.BeginAccept(OnEndAccept, null);
+
             Debug.Log("Listening");
         }
         else
         {
+            IPAddress remoteIpa = IPAddress.Parse(remoteIp);
+            IPEndPoint remoteIpe = new IPEndPoint(remoteIpa, remotePort);
+
             Debug.Log("Client");
 
-            clientSocket = new Socket(myIpa.AddressFamily,
+            clientSocket = new Socket(localIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.BeginConnect(oIpe, OnEndConnect, null);
+            clientSocket.BeginConnect(remoteIpe, OnEndConnect, null);
+
             Debug.Log("Connecting");
         }
     }

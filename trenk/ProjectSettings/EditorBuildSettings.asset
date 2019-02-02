@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/VsTest.unity
+    guid: f6fe3429991c0684e8e7e3d4500651fc
+  - enabled: 0
     path: Assets/Scenes/NetTest2.unity
     guid: 429baa14e47bd434299de4a345fe6cbc
   - enabled: 0
@@ -14,7 +17,4 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Train.unity
     guid: a12ee3e375fa20c4e87613177ac87647
-  - enabled: 0
-    path: Assets/Scenes/VsTest.unity
-    guid: f6fe3429991c0684e8e7e3d4500651fc
   m_configObjects: {}

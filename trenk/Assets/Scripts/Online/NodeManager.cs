@@ -22,9 +22,9 @@ public class NodeManager : Singleton<NodeManager>
             {
                 IpParam p = (IpParam)e;
 
-                Net.Host = p.host;
-                Net.targetIp = p.ip;
-                Net.targetPort = p.port;
+                Net.Hosting = p.host;
+                Net.remoteIp = p.ip;
+                Net.remotePort = p.port;
                 Net.Listen();
 
                 Debug.Log("Try connect as " + (p.host ? "host" : "client"));

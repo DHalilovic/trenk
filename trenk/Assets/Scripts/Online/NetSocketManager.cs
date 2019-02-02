@@ -7,11 +7,10 @@ using UnityEngine;
 public class NetSocketManager
 {
     public short localPort = 9999; // Local port
-    public short targetPort = 9999; // Opponent's port
-    public string targetIp = "127.0.0.1"; // Opponent's address
-    public bool Host { get; set; } // Is this hosting or joining a game?
+    public short remotePort = 9999; // Opponent's port
+    public string remoteIp; // Opponent's address
+    public bool Hosting { get; set; } // Is this hosting or joining a game?
 
-    private const string localIp = "127.0.0.1"; // Local address
     private Socket serverSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
     private BufferedStream stream; // Wraps socket for data retrieval
@@ -25,16 +24,17 @@ public class NetSocketManager
 
     public void Listen()
     {
-        IPAddress myIpa = IPAddress.Parse(localIp);
-        IPEndPoint myIpe = new IPEndPoint(myIpa, localPort);
+        IPAddress localIpa = IPAddress.Any;
 
-        if (Host)
+        if (Hosting)
         {
             Debug.Log("Host");
 
-            serverSocket = new Socket(myIpa.AddressFamily,
+            IPEndPoint localIpe = new IPEndPoint(localIpa, localPort);
+
+            serverSocket = new Socket(localIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            serverSocket.Bind(myIpe);
+            serverSocket.Bind(localIpe);
             serverSocket.Listen(100);
             serverSocket.BeginAccept(OnEndAccept, null);
         }
@@ -42,12 +42,14 @@ public class NetSocketManager
         {
             Debug.Log("Client");
 
-            IPAddress oIpa = IPAddress.Parse(targetIp);
-            IPEndPoint oIpe = new IPEndPoint(oIpa, targetPort);
+            IPAddress remoteIpa = IPAddress.Parse(remoteIp);
+            IPEndPoint remoteIpe = new IPEndPoint(remoteIpa, remotePort);
 
-            clientSocket = new Socket(myIpa.AddressFamily,
+            clientSocket = new Socket(localIpa.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
-            clientSocket.BeginConnect(oIpe, OnEndConnect, null);
+            clientSocket.BeginConnect(remoteIpe, OnEndConnect, null);
+
+            Debug.Log("Connecting");
         }
     }
 
