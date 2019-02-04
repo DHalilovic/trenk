@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class MessageSerializer : INetSerializer
 {
@@ -21,6 +22,7 @@ public class MessageSerializer : INetSerializer
                 case (byte)Message.MessageType.INPUT:
                     message = new Message(Message.MessageType.INPUT, new InputMessage(BitConverter.ToInt16(data, 0), data[2]));
                     node.MessageQueue.Enqueue(message);
+                    Debug.Log("input");
                     break;
                 case (byte)Message.MessageType.COUNT:
 

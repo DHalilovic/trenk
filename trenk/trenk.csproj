@@ -616,6 +616,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="trenk.Plugins.csproj">
+      <Project>{C494B80E-74CD-E08E-3A38-3527FEA20FFB}</Project>
+      <Name>trenk.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{3A848AB7-9891-EDDA-D555-BF184C2F81F4}</Project>
       <Name>Unity.TextMeshPro.Editor</Name>
@@ -661,6 +665,7 @@
     <Compile Include="Assets\Scripts\Online\MessageSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\NetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetRoundManager.cs" />
+    <Compile Include="Assets\Scripts\Online\NetRoundManager0.cs" />
     <Compile Include="Assets\Scripts\Online\NetRoundStarter.cs" />
     <Compile Include="Assets\Scripts\Online\NetSocketManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest1.cs" />
@@ -674,6 +679,7 @@
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Plugins\IngameDebugConsole\README.txt" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryCommon.uss" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryDark.uss" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryLight.uss" />

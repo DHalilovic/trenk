@@ -290,6 +290,12 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="ZeroFormatter">
+      <HintPath>Assets/Plugins/ZeroFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="ZeroFormatter.Interfaces">
+      <HintPath>Assets/Plugins/ZeroFormatter.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/PackageCache/com.unity.ads@2.3.1/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -310,12 +316,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter">
-      <HintPath>Assets/Plugins/ZeroFormatter.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeroFormatter.Interfaces">
-      <HintPath>Assets/Plugins/ZeroFormatter.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.3.0f2\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\mscorlib.dll</HintPath>
@@ -673,6 +673,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="trenk.Plugins.csproj">
+      <Project>{C494B80E-74CD-E08E-3A38-3527FEA20FFB}</Project>
+      <Name>trenk.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="trenk.csproj">
       <Project>{1E62726E-9EAF-AF7E-279F-E1A8C5CDDDF2}</Project>
       <Name>trenk</Name>
@@ -702,6 +706,7 @@
     <Compile Include="Assets\Editor\MultiplayersBuildAndRun.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Plugins\IngameDebugConsole\README.txt" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryCommon.uss" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryDark.uss" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryLight.uss" />

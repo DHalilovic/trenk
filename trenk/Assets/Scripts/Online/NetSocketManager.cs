@@ -65,7 +65,7 @@ public class NetSocketManager
 
     protected void OnEndAccept(IAsyncResult ar)
     {
-        Debug.Log("Received request");
+        //Debug.Log("Received request");
 
         clientSocket = serverSocket.EndAccept(ar);
         clientSocket.NoDelay = true; // Improve performance
@@ -74,7 +74,7 @@ public class NetSocketManager
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         EventManager.Instance.Raise("connect", new BoolParam(true));
-        Debug.Log("Accepted client");
+        //Debug.Log("Accepted client");
         StopListening(); // Don't listen for additional clients
     }
 
@@ -87,18 +87,18 @@ public class NetSocketManager
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         EventManager.Instance.Raise("connect", new BoolParam(false));
-        Debug.Log("Connected to server");
+        //Debug.Log("Connected to server");
     }
 
     private void OnRead(IAsyncResult ar)
     {
-        //Debug.Log("Received");
+        Debug.Log("Received");
 
         int readLength = stream.EndRead(ar);
 
         if (readLength <= 0)
         {
-            Debug.Log("Client disconnected");
+            //Debug.Log("Client disconnected");
             OnDisconnect();
         }
         else

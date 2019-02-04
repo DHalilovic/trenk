@@ -27,7 +27,7 @@ public class NodeManager : Singleton<NodeManager>
                 Net.remotePort = p.port;
                 Net.Listen();
 
-                Debug.Log("Try connect as " + (p.host ? "host" : "client"));
+                //Debug.Log("Try connect as " + (p.host ? "host" : "client"));
             });
 
         tryConnectTimeoutListener =

@@ -73,19 +73,24 @@ public class NetRoundManager : MonoBehaviour, Movement
             }
 
             // Wait for player inputs for some frames
-            if (cycleStep < framesPerStep - 1)
+            if (cycleStep < framesPerStep)
             {
                 // Increment cycle progress
                 cycleStep++;
+                //Debug.Log("CS " + cycleStep);
             }
-            else if (cycleStep == framesPerStep - 1 && !moveChosen)
+
+            if (cycleStep == framesPerStep - 1 && !moveChosen)
             {
                 // Send last-second "straight" message if no local input received
                 SendInput(nextHomeMove);
+                moveChosen = true;
             }
 
             // Move board only when message received and current cycle completed
-            if (currentInputMessage != null && cycleStep >= framesPerStep - 1)
+            if (currentInputMessage != null 
+                && moveChosen 
+                && cycleStep > framesPerStep - 1)
             {
                 byte homeRot = 0, awayRot = 0;
 
@@ -156,6 +161,8 @@ public class NetRoundManager : MonoBehaviour, Movement
 
                 // Increment overall frame counter
                 gameStep++;
+
+               //Debug.Log("GS " + gameStep);
             }
         }
     }

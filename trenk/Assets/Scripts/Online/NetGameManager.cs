@@ -110,7 +110,7 @@ public class NetGameManager : MonoBehaviour
         if (e != null)
         {
             EventManager.Instance.Subscribe("connect", onConnectListener);
-            Debug.Log("Subbed");
+            //Debug.Log("Subbed");
         }
     }
 
