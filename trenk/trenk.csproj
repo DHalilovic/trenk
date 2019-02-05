@@ -665,7 +665,6 @@
     <Compile Include="Assets\Scripts\Online\MessageSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\NetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetRoundManager.cs" />
-    <Compile Include="Assets\Scripts\Online\NetRoundManager0.cs" />
     <Compile Include="Assets\Scripts\Online\NetRoundStarter.cs" />
     <Compile Include="Assets\Scripts\Online\NetSocketManager.cs" />
     <Compile Include="Assets\Scripts\Online\NetTest1.cs" />

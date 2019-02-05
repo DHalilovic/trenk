@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: NaN, g: NaN, b: NaN, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -338,7 +338,7 @@ MonoBehaviour:
   mineParent: {fileID: 996949386}
   onRoundPrepare: {fileID: 11400000, guid: 466a6ec65d4a7824480ae27e4a83acce, type: 2}
   OnRoundEnd: {fileID: 11400000, guid: 2d30d51d1c906c44ea8979675d0443dc, type: 2}
-  arenaHeight: 60
+  arenaHeight: 50
   framesPerStep: 4
 --- !u!4 &1061590585
 Transform:

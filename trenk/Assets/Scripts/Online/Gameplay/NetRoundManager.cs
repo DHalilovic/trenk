@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NetGameManager))]
@@ -13,6 +14,8 @@ public class NetRoundManager : MonoBehaviour, Movement
     [HideInInspector] public const byte LEFT = 1;
     [HideInInspector] public const byte RIGHT = 2;
 
+    private const byte MAX_QUEUED = 2;
+
     private NetGameManager manager;
     private short gameStep;
     private short cycleStep;
@@ -20,30 +23,30 @@ public class NetRoundManager : MonoBehaviour, Movement
     private byte nextHomeMove, nextAwayMove;
     private byte hit;
     private Message currentInputMessage;
+    private Queue<byte> moveQueue; // At max 2 long
 
     private void Awake()
     {
         Ongoing = false;
         manager = GetComponent<NetGameManager>();
+        moveQueue = new Queue<byte>();
     }
 
     public void OnLeft()
     {
-        if (!moveChosen && Ongoing)
+        // If input queue not filled, accept input
+        if (Ongoing && moveQueue.Count < MAX_QUEUED)
         {
-            moveChosen = true;
-            nextHomeMove = LEFT;
-            SendInput(nextHomeMove);
+            moveQueue.Enqueue(LEFT);
         }
     }
 
     public void OnRight()
     {
-        if (!moveChosen && Ongoing)
+        // If input queue not filled, accept input
+        if (Ongoing && moveQueue.Count < MAX_QUEUED)
         {
-            moveChosen = true;
-            nextHomeMove = RIGHT;
-            SendInput(nextHomeMove);
+            moveQueue.Enqueue(RIGHT);
         }
     }
 
@@ -77,7 +80,16 @@ public class NetRoundManager : MonoBehaviour, Movement
             {
                 // Increment cycle progress
                 cycleStep++;
+                
                 //Debug.Log("CS " + cycleStep);
+
+                // Process movement input if available
+                if (!moveChosen && moveQueue.Count > 0)
+                {
+                    nextHomeMove = moveQueue.Dequeue();
+                    SendInput(nextHomeMove);
+                    moveChosen = true;
+                }
             }
 
             if (cycleStep == framesPerStep - 1 && !moveChosen)

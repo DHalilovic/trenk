@@ -5,28 +5,37 @@ using UnityEngine;
 [RequireComponent(typeof(TrainGameManager))]
 public class TrainRoundManager : MonoBehaviour, Movement
 {
-    private TrainGameManager starter;
+    // Indicate which direction each player is travelling
+    [HideInInspector] public const byte STRAIGHT = 0;
+    [HideInInspector] public const byte LEFT = 1;
+    [HideInInspector] public const byte RIGHT = 2;
+
+    private const byte MAX_QUEUED = 2;
+
+    private TrainGameManager manager;
     private int framesPerStep;
     private int gameStep;
     private int cycleStep;
-    private bool turnChosen, requestLeft, requestRight;
+    private byte nextMove;
+    private Queue<byte> moveQueue; // At max 2 long
 
     private void Start()
     {
-        starter = GetComponent<TrainGameManager>();
-        framesPerStep = starter.framesPerStep;
+        manager = GetComponent<TrainGameManager>();
+        framesPerStep = manager.framesPerStep;
+        moveQueue = new Queue<byte>();
     }
 
     public void OnLeft()
     {
-        if (!turnChosen)
-            requestLeft = turnChosen = true;
+        if (moveQueue.Count < MAX_QUEUED)
+            moveQueue.Enqueue(LEFT);
     }
 
     public void OnRight()
     {
-        if (!turnChosen)
-            requestRight = turnChosen = true;
+        if (moveQueue.Count < MAX_QUEUED)
+            moveQueue.Enqueue(RIGHT);
     }
 
     private void FixedUpdate()
@@ -40,31 +49,40 @@ public class TrainRoundManager : MonoBehaviour, Movement
         {
             byte homeRot = 0;
 
-            // Change player direction based on input
-            if (requestLeft)
-                homeRot = starter.RotateHomeLeft();
-            else if (requestRight)
-                homeRot = starter.RotateHomeRight();
-            else
-                homeRot = starter.HomeRot;
+            if (moveQueue.Count > 0)
+                nextMove = moveQueue.Dequeue();
 
-            bool hit = starter.Move();
-            
+            switch (nextMove)
+            {
+                // Change player direction based on input
+                case LEFT:
+                    homeRot = manager.RotateHomeLeft();
+                    break;
+                case RIGHT:
+                    homeRot = manager.RotateHomeRight();
+                    break;
+                default:
+                    homeRot = manager.HomeRot;
+                    break;
+            }
+
+            bool hit = manager.Move();
+
             // If player hits something...
             if (hit)
             {
                 // Call for end of round
-                starter.OnRoundEnd.Raise();
-            }   
+                manager.OnRoundEnd.Raise();
+            }
 
             cycleStep = 0; // Reset cycle progress
 
             // Reset input polling
-            turnChosen = requestLeft = requestRight = false;
-        }
+            nextMove = STRAIGHT;
 
-        // Increment overall frame counter
-        gameStep++;
+            // Increment overall frame counter
+            gameStep++;
+        }
     }
 
     // Reset steps for new round gameplay
