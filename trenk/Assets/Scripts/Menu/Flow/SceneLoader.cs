@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader : Singleton<SceneLoader>
@@ -14,7 +15,7 @@ public class SceneLoader : Singleton<SceneLoader>
         // Initialize listeners
         loadSceneListener = OnLoadScene;
         requestListener = OnRequestScene;
-        requestListener = OnLoadRequest;
+        loadRequestListener = OnLoadRequest;
     }
 
     private void OnEnable()
@@ -24,9 +25,11 @@ public class SceneLoader : Singleton<SceneLoader>
         if (e != null)
         {
             EventManager.Instance.Subscribe("load-scene-direct", loadSceneListener);
-            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
             EventManager.Instance.Subscribe("request-scene", requestListener);
+            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -36,9 +39,11 @@ public class SceneLoader : Singleton<SceneLoader>
         if (e != null)
         {
             EventManager.Instance.Unsubscribe("load-scene-direct", loadSceneListener);
-            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
             EventManager.Instance.Subscribe("request-scene", requestListener);
+            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
         }
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void LoadScene(int i)
@@ -66,8 +71,9 @@ public class SceneLoader : Singleton<SceneLoader>
         LoadScene(Requested);
     }
 
-    public void SceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        EventManager.Instance.Raise("in-scene", new IntParam(Requested));
+        EventManager.Instance.Raise("in-scene", null);
+        Debug.Log("Scene loaded");
     }
 }
