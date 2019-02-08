@@ -64,7 +64,7 @@ public class MainMenuManager : MonoBehaviour
         trainButton.onClick.AddListener(
             () =>
             {
-                EventManager.Instance.Raise("scene", new IntParam(1));
+                EventManager.Instance.Raise("load-scene-direct", new IntParam(1));
             });
 
         errorConfirmButton.onClick.AddListener(() => transitioner.GoOneWay(connectTrans, mainTrans));

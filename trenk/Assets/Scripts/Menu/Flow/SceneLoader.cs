@@ -3,14 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
-    private Action<IEventParam> sceneListener;
+    public int Requested { get; private set; }
+
+    private Action<IEventParam> loadSceneListener, requestListener, loadRequestListener;
 
     protected override void Awake()
     {
         base.Awake();
 
         // Initialize listeners
-        sceneListener = new Action<IEventParam>(OnLoadScene);
+        loadSceneListener = OnLoadScene;
+        requestListener = OnRequestScene;
+        requestListener = OnLoadRequest;
     }
 
     private void OnEnable()
@@ -19,7 +23,9 @@ public class SceneLoader : Singleton<SceneLoader>
 
         if (e != null)
         {
-            EventManager.Instance.Subscribe("scene", sceneListener);
+            EventManager.Instance.Subscribe("load-scene-direct", loadSceneListener);
+            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
+            EventManager.Instance.Subscribe("request-scene", requestListener);
         }
     }
 
@@ -29,7 +35,9 @@ public class SceneLoader : Singleton<SceneLoader>
 
         if (e != null)
         {
-            EventManager.Instance.Unsubscribe("scene", sceneListener);
+            EventManager.Instance.Unsubscribe("load-scene-direct", loadSceneListener);
+            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
+            EventManager.Instance.Subscribe("request-scene", requestListener);
         }
     }
 
@@ -43,5 +51,23 @@ public class SceneLoader : Singleton<SceneLoader>
         IntParam p = (IntParam)e;
 
         LoadScene(p.val); // Load multiplayer arena
+    }
+
+    private void OnRequestScene(IEventParam e)
+    {
+        IntParam p = (IntParam)e;
+
+        if (p.val > -1)
+            Requested = p.val;
+    }
+
+    private void OnLoadRequest(IEventParam e)
+    {
+        LoadScene(Requested);
+    }
+
+    public void SceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EventManager.Instance.Raise("in-scene", new IntParam(Requested));
     }
 }
