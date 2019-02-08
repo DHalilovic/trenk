@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class NetGameManager : MonoBehaviour
 {
     public string gameStartEvent = "connect";
+    public int framesPerStep = 6;
     public int scoreCap = 5; // Score required to win match
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
@@ -160,6 +162,18 @@ public class NetGameManager : MonoBehaviour
         return AwayRot;
     }
 
+    // Smoovely move player from start to destination
+    IEnumerator Shift(GameObject o, Vector3 start, Vector3 end)
+    {
+        for (int i = 0; i < framesPerStep; i++)
+        {
+            // Move object towards destination in even increments
+            o.transform.position = Vector3.Lerp(start, end, 1.0f * i / framesPerStep);
+            // Wait a frame
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
     // Move players one space based on position, direction
     public byte Move()
     {
@@ -226,8 +240,11 @@ public class NetGameManager : MonoBehaviour
                 Board[homePos.x, homePos.y] = HOME;
                 Board[awayPos.x, awayPos.y] = AWAY;
                 // Move local players in scene
-                HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
-                AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+                //HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+                //AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+
+                StartCoroutine(Shift(HomePlayer, HomePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
+                StartCoroutine(Shift(AwayPlayer, AwayPlayer.transform.position, new Vector3(awayPos.x, 0, awayPos.y)));
             }
             else if (!homeSafe)
                 hit = HOME;

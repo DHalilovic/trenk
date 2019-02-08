@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(NetGameManager))]
 public class NetRoundManager : MonoBehaviour, Movement
 {
-    public int framesPerStep = 5;
-
     public bool Ongoing { get; set; }
 
     // Indicate which direction each player is travelling
@@ -17,6 +15,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     private const byte MAX_QUEUED = 2;
 
     private NetGameManager manager;
+    private int framesPerStep;
     private short gameStep;
     private short cycleStep;
     private bool moveChosen;
@@ -29,6 +28,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     {
         Ongoing = false;
         manager = GetComponent<NetGameManager>();
+        framesPerStep = manager.framesPerStep;
         moveQueue = new Queue<byte>();
     }
 

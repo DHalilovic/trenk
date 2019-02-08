@@ -437,7 +437,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameStartEvent: connect
-  scoreCap: 5
+  framesPerStep: 6
+  scoreCap: 3
   playerPrefab: {fileID: 6800951995778960053, guid: 26040c1cb48b7c547924063b485bbdfa,
     type: 3}
   fencePrefab: {fileID: 6800951995778960053, guid: 3a2fa11c35f0eba44add70e00c612158,
@@ -474,7 +475,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1104cc48c416e4887f8416c9cea927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  framesPerStep: 6
 --- !u!114 &1061590588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,7 +614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000076293945
+      value: 0.000022888184
       objectReference: {fileID: 0}
     - target: {fileID: 22428984, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMin.y
