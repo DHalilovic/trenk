@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class NetGameManager : MonoBehaviour
 {
+    public string gameStartEvent = "connect";
     public int scoreCap = 5; // Score required to win match
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
@@ -109,7 +110,7 @@ public class NetGameManager : MonoBehaviour
 
         if (e != null)
         {
-            EventManager.Instance.Subscribe("connect", onConnectListener);
+            EventManager.Instance.Subscribe(gameStartEvent, onConnectListener);
             //Debug.Log("Subbed");
         }
     }
@@ -120,7 +121,7 @@ public class NetGameManager : MonoBehaviour
 
         if (e != null)
         {
-            EventManager.Instance.Unsubscribe("connect", onConnectListener);
+            EventManager.Instance.Unsubscribe(gameStartEvent, onConnectListener);
         }
     }
 

@@ -436,6 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d47cf24aeb276c44b8cca76c2aed431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameStartEvent: connect
   scoreCap: 5
   playerPrefab: {fileID: 6800951995778960053, guid: 26040c1cb48b7c547924063b485bbdfa,
     type: 3}
