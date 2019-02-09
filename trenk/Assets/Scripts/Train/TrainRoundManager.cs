@@ -72,7 +72,8 @@ public class TrainRoundManager : MonoBehaviour, Movement
             if (hit)
             {
                 // Call for end of round
-                manager.OnRoundEnd.Raise();
+                //manager.OnRoundEnd.Raise();
+                EventManager.Instance.Raise("round-end", null);
             }
 
             cycleStep = 0; // Reset cycle progress

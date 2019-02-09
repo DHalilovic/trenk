@@ -16,7 +16,6 @@ public class TrainPauseManager : MonoBehaviour
 
     public void OnPause()
     {
-        Debug.Log("Poop");
         EventManager.Instance.Raise("request-scene", new IntParam(0));
     }
 }
