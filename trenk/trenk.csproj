@@ -655,6 +655,7 @@
     <Compile Include="Assets\Scripts\Interfaces\Singleton.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\SceneLoader.cs" />
+    <Compile Include="Assets\Scripts\Menu\Flow\SceneTransitioner.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\SimpleTransitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitioner.cs" />

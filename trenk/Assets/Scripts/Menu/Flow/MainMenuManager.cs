@@ -16,7 +16,7 @@ public class MainMenuManager : MonoBehaviour
 
     private Transitioner transitioner;
     private Transitionable mainTrans, connectTrans;
-    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onTryConnectTimeoutListener;
+    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onTryConnectTimeoutListener, connectListener;
 
 
     private void Awake()
@@ -44,6 +44,8 @@ public class MainMenuManager : MonoBehaviour
                 connectText.text = "Failed to Connect";
                 errorConfirmButton.gameObject.SetActive(true);
             });
+
+        connectListener = (e) => Debug.Log("Connected");
 
         transitioner = GetComponent<Transitioner>();
         mainTrans = mainCanvas.GetComponent<Transitionable>();
