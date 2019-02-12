@@ -5,6 +5,7 @@ using UnityEngine;
 public class NetGameManager : MonoBehaviour
 {
     public string gameStartEvent = "connect";
+    public string gameEndEvent = "end";
     public int framesPerStep = 6;
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
@@ -34,7 +35,7 @@ public class NetGameManager : MonoBehaviour
     public byte AwayRot { get; protected set; } // Current opponent direction
 
     protected Position homePos, awayPos; // Current positions on board
-    protected Action<IEventParam> onConnectListener;
+    protected Action<IEventParam> onConnectListener, endListener;
     protected NetRoundManager round;
 
     // Contains gameObject placement on board and in scene
@@ -64,7 +65,8 @@ public class NetGameManager : MonoBehaviour
         round = GetComponent<NetRoundManager>();
 
         // Prepare listener
-        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true;  Debug.Log("Round start");  });
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true; round.enabled = true; Debug.Log("Round start");  });
+        endListener = (e) => { round.enabled = false; round.Ongoing = false; };
     }
 
     public virtual void Start()
@@ -112,6 +114,7 @@ public class NetGameManager : MonoBehaviour
         if (e != null)
         {
             EventManager.Instance.Subscribe(gameStartEvent, onConnectListener);
+            EventManager.Instance.Subscribe(gameEndEvent, endListener);
             //Debug.Log("Subbed");
         }
     }
@@ -123,6 +126,7 @@ public class NetGameManager : MonoBehaviour
         if (e != null)
         {
             EventManager.Instance.Unsubscribe(gameStartEvent, onConnectListener);
+            EventManager.Instance.Unsubscribe(gameEndEvent, endListener);
         }
     }
 

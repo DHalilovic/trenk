@@ -662,6 +662,7 @@
     <Compile Include="Assets\Scripts\Online\Gameplay\NetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\Gameplay\NetRoundManager.cs" />
     <Compile Include="Assets\Scripts\Online\Gameplay\NetRoundStarter.cs" />
+    <Compile Include="Assets\Scripts\Online\Gameplay\VsNetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\INetSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\InputMessage.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\LobbyMessenger.cs" />

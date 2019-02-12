@@ -1,4 +1,14 @@
 ﻿
+public class ByteParam : IEventParam
+{
+    public byte val;
+
+    public ByteParam(byte val)
+    {
+        this.val = val;
+    }
+}
+
 public class BoolParam : IEventParam
 {
     public bool val;

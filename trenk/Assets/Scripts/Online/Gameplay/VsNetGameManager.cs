@@ -1,13 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VsNetGameManager : NetGameManager
 {
+    private CountdownTimer timer;
+
     public override void Awake()
     {
         round = GetComponent<NetRoundManager>();
-        // Prepare listener
-        onConnectListener = (e) => { round.Ongoing = true; Debug.Log("Round start"); };
+        timer = GetComponent<CountdownTimer>();
+
+        // Prepare listeners
+        onConnectListener = (e) => { round.Ongoing = true; };      
     }
 }

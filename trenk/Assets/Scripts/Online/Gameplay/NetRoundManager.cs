@@ -140,26 +140,11 @@ public class NetRoundManager : MonoBehaviour, Movement
                 // If a player hits something...
                 if (hit != 0)
                 {
-                    // Check who died
-                    switch (hit)
-                    {
-                        case NetGameManager.HOME:
-                            // Local player died
-
-                            break;
-                        case NetGameManager.AWAY:
-                            // Opponent died
-
-                            break;
-                        case NetGameManager.HAZARD:
-                            // Both players died simultanously
-
-                            break;
-                    }
-
                     // Call for end of round
-                    //manager.OnRoundEnd.Raise();
-                    this.enabled = false;
+                    EventManager.Instance.Raise("end", new ByteParam(hit));
+
+                    // Disable self
+                    //this.enabled = false;
                 }
 
                 cycleStep = 0; // Reset cycle progress
