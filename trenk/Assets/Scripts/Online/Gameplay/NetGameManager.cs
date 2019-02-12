@@ -6,7 +6,6 @@ public class NetGameManager : MonoBehaviour
 {
     public string gameStartEvent = "connect";
     public int framesPerStep = 6;
-    public int scoreCap = 5; // Score required to win match
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
     public GameObject minePrefab; // Template GameObject for mines
@@ -60,12 +59,12 @@ public class NetGameManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public virtual void Awake()
     {
         round = GetComponent<NetRoundManager>();
 
         // Prepare listener
-        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true;  Debug.Log("JA");  });
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true;  Debug.Log("Round start");  });
     }
 
     public virtual void Start()
@@ -106,7 +105,7 @@ public class NetGameManager : MonoBehaviour
         AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         EventManager e = EventManager.Instance;
 
@@ -117,7 +116,7 @@ public class NetGameManager : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         EventManager e = EventManager.Instance;
 
@@ -239,10 +238,8 @@ public class NetGameManager : MonoBehaviour
                 // Move local players on board
                 Board[homePos.x, homePos.y] = HOME;
                 Board[awayPos.x, awayPos.y] = AWAY;
-                // Move local players in scene
-                //HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
-                //AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
 
+                // Move local players in scene
                 StartCoroutine(Shift(HomePlayer, HomePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
                 StartCoroutine(Shift(AwayPlayer, AwayPlayer.transform.position, new Vector3(awayPos.x, 0, awayPos.y)));
             }

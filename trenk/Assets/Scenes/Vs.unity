@@ -414,7 +414,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1061590585}
-  - component: {fileID: 1061590584}
+  - component: {fileID: 1061590586}
   - component: {fileID: 1061590587}
   - component: {fileID: 1061590588}
   m_Layer: 0
@@ -424,31 +424,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1061590584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1061590583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d47cf24aeb276c44b8cca76c2aed431, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameStartEvent: connect
-  framesPerStep: 6
-  scoreCap: 3
-  playerPrefab: {fileID: 6800951995778960053, guid: 26040c1cb48b7c547924063b485bbdfa,
-    type: 3}
-  fencePrefab: {fileID: 6800951995778960053, guid: 3a2fa11c35f0eba44add70e00c612158,
-    type: 3}
-  minePrefab: {fileID: 6800951995778960053, guid: 5e6f8a53b32b27b4c8f7eabf0ed3b8a0,
-    type: 3}
-  playerParent: {fileID: 1440059192}
-  fenceParent: {fileID: 2093743571}
-  mineParent: {fileID: 996949386}
-  arenaHeight: 50
 --- !u!4 &1061590585
 Transform:
   m_ObjectHideFlags: 0
@@ -463,6 +438,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1061590586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061590583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 809306cae6058b5419a7fc3f02e28a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameStartEvent: start
+  framesPerStep: 6
+  playerPrefab: {fileID: 6800951995778960053, guid: 26040c1cb48b7c547924063b485bbdfa,
+    type: 3}
+  fencePrefab: {fileID: 6800951995778960053, guid: 3a2fa11c35f0eba44add70e00c612158,
+    type: 3}
+  minePrefab: {fileID: 6800951995778960053, guid: 5e6f8a53b32b27b4c8f7eabf0ed3b8a0,
+    type: 3}
+  playerParent: {fileID: 1440059192}
+  fenceParent: {fileID: 2093743571}
+  mineParent: {fileID: 996949386}
+  arenaHeight: 50
 --- !u!114 &1061590587
 MonoBehaviour:
   m_ObjectHideFlags: 0

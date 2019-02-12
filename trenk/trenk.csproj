@@ -674,6 +674,7 @@
     <Compile Include="Assets\Scripts\Online\Test\NetTest3.cs" />
     <Compile Include="Assets\Scripts\Online\Test\VsTestStarter.cs" />
     <Compile Include="Assets\Scripts\Time\CountdownTimer.cs" />
+    <Compile Include="Assets\Scripts\Train\TrainFlowManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
