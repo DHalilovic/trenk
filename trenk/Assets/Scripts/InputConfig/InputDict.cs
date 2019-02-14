@@ -23,5 +23,9 @@ public class InputDict : Singleton<InputDict>
         keyCodes.Add("down", KeyCode.S);
         keyCodes.Add("left", KeyCode.A);
         keyCodes.Add("right", KeyCode.D);
+        keyCodes.Add("up", KeyCode.UpArrow);
+        keyCodes.Add("down", KeyCode.DownArrow);
+        keyCodes.Add("left", KeyCode.LeftArrow);
+        keyCodes.Add("right", KeyCode.RightArrow);
     }
 }

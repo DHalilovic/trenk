@@ -39,10 +39,15 @@ public class TrainGameManager : MonoBehaviour
     private byte[,] board; // Stores positional data in arena
     public byte[,] Board { get { return board; } }
     private GameObject homePlayer;
+    private GameObject awayPlayer;
     public GameObject HomePlayer { get { return homePlayer; } }
+    public GameObject AwayPlayer { get { return awayPlayer;  } }
     private byte homeRot; // Current player direction
+    private byte awayRot; // Away player direction
     public byte HomeRot { get { return homeRot; } }
+    public byte AwayRot { get { return awayRot; } }
     private Position homePos;
+    private Position awayPos;
 
     void Start()
     {
@@ -68,9 +73,15 @@ public class TrainGameManager : MonoBehaviour
         // Place player on board
         homePos = new Position(arenaHeight / 3, arenaHeight / 2);
         homeRot = RIGHT;
+        // Place away player on board
+        awayPos = new Position(arenaHeight - arenaHeight / 3, arenaHeight / 2);
+        awayRot = LEFT;
         // Initialize player in scene
         homePlayer = Instantiate(playerPrefab, playerParent);
         homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+        //Initialize away player in scene
+        awayPlayer = Instantiate(playerPrefab, playerParent);
+        awayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
         // Commence round readying
         onRoundPrepare.Raise();
     }
@@ -98,7 +109,19 @@ public class TrainGameManager : MonoBehaviour
         return homeRot;
     }
 
-    // Smoovely move player from start to destination
+    public byte RotateAwayLeft()
+    {
+        awayRot = ClampRotation(awayRot + 1);
+        return awayRot;
+    }
+
+    public byte RotateAwayRight()
+    {
+        awayRot = ClampRotation(awayRot - 1);
+        return awayRot;
+    }
+
+    // Smoothly move player from start to destination
     IEnumerator Shift(GameObject o, Vector3 start, Vector3 end)
     {
         for (int i = 0; i < framesPerStep; i++)
@@ -115,10 +138,13 @@ public class TrainGameManager : MonoBehaviour
     {
         bool hit = false;
 
-        // Place mine on board
+        // Place mine on board for each player
         board[homePos.x, homePos.y] = HAZARD;
+        board[awayPos.x, awayPos.y] = HAZARD;
+
         // Place mine in scene
         GameObject.Instantiate(minePrefab, new Vector3(homePos.x, 0, homePos.y), Quaternion.identity, mineParent);
+        GameObject.Instantiate(minePrefab, new Vector3(awayPos.x, 0, awayPos.y), Quaternion.identity, mineParent);
 
         // Determine resulting player position
         switch (homeRot)
@@ -137,14 +163,49 @@ public class TrainGameManager : MonoBehaviour
                 break;
         }
 
+        // Determine resulting away player position
+        switch (awayRot)
+        {
+            case UP:
+                awayPos.y--;
+                break;
+            case RIGHT:
+                awayPos.x++;
+                break;
+            case DOWN:
+                awayPos.y++;
+                break;
+            case LEFT:
+                awayPos.x--;
+                break;
+        }
+
+        //// If no collisions...
+        //if (board[homePos.x, homePos.y] == EMPTY)
+        //{
+        //    // Move player on board
+        //    board[homePos.x, homePos.y] = P1;
+        //    // Move player in scene
+        //    //homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
+        //    StartCoroutine(Shift(homePlayer, homePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
+        //}
+        //else
+        //    hit = true;
+
+        //return hit;
+
         // If no collisions...
-        if (board[homePos.x, homePos.y] == EMPTY)
+        if (board[homePos.x, homePos.y] == EMPTY && board[awayPos.x, awayPos.y] == EMPTY)
         {
             // Move player on board
             board[homePos.x, homePos.y] = P1;
+            // Move away player on board
+            board[awayPos.x, awayPos.y] = P2;
             // Move player in scene
             //homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
             StartCoroutine(Shift(homePlayer, homePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
+            // Move away player in scene
+            StartCoroutine(Shift(awayPlayer, awayPlayer.transform.position, new Vector3(awayPos.x, 0, awayPos.y)));
         }
         else
             hit = true;

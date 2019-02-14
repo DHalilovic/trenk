@@ -1,12 +1,8 @@
 ﻿<Properties StartupConfiguration="{71A278AC-EEDC-F02D-8718-D5BE9F40551F}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Utility/LobbyMessager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Train/TrainGameManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Train/TrainGameStarter.cs" Line="31" Column="5" />
-      <File FileName="Assets/Scripts/Host/HostGameStarter.cs" Line="45" Column="1" />
-      <File FileName="Assets/Scripts/Arena/MovementInput.cs" Line="4" Column="1" />
-      <File FileName="Assets/Scripts/SceneLoader.cs" Line="12" Column="1" />
-      <File FileName="Assets/Scripts/Utility/SceneLoader.cs" Line="13" Column="1" />
-      <File FileName="Assets/Scripts/Utility/LobbyMessager.cs" Line="26" Column="16" />
+      <File FileName="Assets/Plugins/IngameDebugConsole/Scripts/DebugLogItem.cs" Line="20" Column="32" />
+      <File FileName="Assets/Scripts/Train/TrainGameManager.cs" Line="25" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
