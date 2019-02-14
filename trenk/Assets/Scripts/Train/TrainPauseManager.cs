@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class TrainPauseManager : MonoBehaviour
 {
-    public GameEvent onPause, onUnpause;
-
-    private bool paused;
-
     private void OnEnable()
     {
-        InputEventManager.OnPauseEvent += Pause;
+        InputEventManager.OnPauseEvent += OnPause;
     }
 
-    // Call for pausing or unpausing
-    private void Pause()
+    private void OnDisable()
     {
-        if (paused)
-            onUnpause.Raise();
-        else
-            onPause.Raise();
+        InputEventManager.OnPauseEvent -= OnPause;
+    }
 
-        // Switch paused state
-        paused = !paused;
+    public void OnPause()
+    {
+        EventManager.Instance.Raise("request-scene", new IntParam(0));
     }
 }

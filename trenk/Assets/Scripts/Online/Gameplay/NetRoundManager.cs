@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(NetGameManager))]
 public class NetRoundManager : MonoBehaviour, Movement
 {
-    public int framesPerStep = 5;
-
     public bool Ongoing { get; set; }
 
     // Indicate which direction each player is travelling
@@ -17,6 +15,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     private const byte MAX_QUEUED = 2;
 
     private NetGameManager manager;
+    private int framesPerStep;
     private short gameStep;
     private short cycleStep;
     private bool moveChosen;
@@ -29,6 +28,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     {
         Ongoing = false;
         manager = GetComponent<NetGameManager>();
+        framesPerStep = manager.framesPerStep;
         moveQueue = new Queue<byte>();
     }
 
@@ -140,26 +140,11 @@ public class NetRoundManager : MonoBehaviour, Movement
                 // If a player hits something...
                 if (hit != 0)
                 {
-                    // Check who died
-                    switch (hit)
-                    {
-                        case NetGameManager.HOME:
-                            // Local player died
-
-                            break;
-                        case NetGameManager.AWAY:
-                            // Opponent died
-
-                            break;
-                        case NetGameManager.HAZARD:
-                            // Both players died simultanously
-
-                            break;
-                    }
-
                     // Call for end of round
-                    //manager.OnRoundEnd.Raise();
-                    this.enabled = false;
+                    EventManager.Instance.Raise("end", new ByteParam(hit));
+
+                    // Disable self
+                    //this.enabled = false;
                 }
 
                 cycleStep = 0; // Reset cycle progress

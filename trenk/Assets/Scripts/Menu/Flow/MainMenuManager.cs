@@ -16,7 +16,7 @@ public class MainMenuManager : MonoBehaviour
 
     private Transitioner transitioner;
     private Transitionable mainTrans, connectTrans;
-    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onTryConnectTimeoutListener;
+    private Action<IEventParam> onLobbyErrorListener, onTryConnectListener, onTryConnectTimeoutListener, connectListener;
 
 
     private void Awake()
@@ -45,6 +45,12 @@ public class MainMenuManager : MonoBehaviour
                 errorConfirmButton.gameObject.SetActive(true);
             });
 
+        connectListener = (e) =>
+            {
+                connectText.text = "Starting Match...";
+                EventManager.Instance.Raise("request-scene", new IntParam(2));
+            };
+
         transitioner = GetComponent<Transitioner>();
         mainTrans = mainCanvas.GetComponent<Transitionable>();
         connectTrans = connectCanvas.GetComponent<Transitionable>();
@@ -64,7 +70,7 @@ public class MainMenuManager : MonoBehaviour
         trainButton.onClick.AddListener(
             () =>
             {
-                EventManager.Instance.Raise("scene", new IntParam(1));
+                EventManager.Instance.Raise("request-scene", new IntParam(1));
             });
 
         errorConfirmButton.onClick.AddListener(() => transitioner.GoOneWay(connectTrans, mainTrans));

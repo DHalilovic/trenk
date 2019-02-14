@@ -19,7 +19,6 @@ public class TrainGameManager : MonoBehaviour
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
     public GameObject minePrefab; // Template GameObject for mines
-    public Transform playerParent, fenceParent, mineParent; // Empties for organizational purposes
     public GameEvent onRoundPrepare, OnRoundEnd; // Events to signal
     public int arenaHeight = 30; // Length, width of square arena
     public int framesPerStep = 3;
@@ -40,19 +39,31 @@ public class TrainGameManager : MonoBehaviour
     public byte[,] Board { get { return board; } }
     private GameObject homePlayer;
     private GameObject awayPlayer;
+
+    private Transform playerParent, fenceParent, mineParent; // Empties for organizational purposes
+
     public GameObject HomePlayer { get { return homePlayer; } }
     public GameObject AwayPlayer { get { return awayPlayer;  } }
+    
     private byte homeRot; // Current player direction
     private byte awayRot; // Away player direction
     public byte HomeRot { get { return homeRot; } }
     public byte AwayRot { get { return awayRot; } }
-    private Position homePos;
+
+    private Position homeSpawn; // Original spwan point
+    private Position homePos; // Current player position
+    private Position awaySpawn;
     private Position awayPos;
 
     void Start()
     {
         // Initialize underlying arena
         board = new byte[arenaHeight, arenaHeight];
+
+        // Get organizers
+        playerParent = GameObject.Find("Players").transform;
+        fenceParent = GameObject.Find("Fences").transform;
+        mineParent = GameObject.Find("Mines").transform;
 
         // Ready board and physical arena
         for (int i = 1; i < arenaHeight - 1; i++)
@@ -71,8 +82,9 @@ public class TrainGameManager : MonoBehaviour
         }
 
         // Place player on board
-        homePos = new Position(arenaHeight / 3, arenaHeight / 2);
+        homePos = homeSpawn = new Position(arenaHeight / 3, arenaHeight / 2);
         homeRot = RIGHT;
+
         // Place away player on board
         awayPos = new Position(arenaHeight - arenaHeight / 3, arenaHeight / 2);
         awayRot = LEFT;
@@ -82,8 +94,10 @@ public class TrainGameManager : MonoBehaviour
         //Initialize away player in scene
         awayPlayer = Instantiate(playerPrefab, playerParent);
         awayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+
         // Commence round readying
-        onRoundPrepare.Raise();
+        //onRoundPrepare.Raise();
+        EventManager.Instance.Raise("round-prepare", null);
     }
 
     // Prevent rotation from exceeding one full cycle
@@ -218,5 +232,19 @@ public class TrainGameManager : MonoBehaviour
     {
         foreach (Transform child in mineParent.transform)
             GameObject.Destroy(child.gameObject);
+
+        for (int i = 1; i < arenaHeight - 1; i++)
+        {
+            for (int j = 1; j < arenaHeight - 1; j++)
+            {
+                if (board[i, j] != EMPTY)
+                    board[i, j] = EMPTY;
+            }
+        }
+
+        homePos = homeSpawn;
+        homeRot = RIGHT;
+
+        homePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
     }
 }

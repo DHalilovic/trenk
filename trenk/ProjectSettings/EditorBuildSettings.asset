@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/VsTest.unity
     guid: f6fe3429991c0684e8e7e3d4500651fc
   - enabled: 0
-    path: Assets/Scenes/NetTest2.unity
-    guid: 429baa14e47bd434299de4a345fe6cbc
-  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: 13e2f50d09b654406a4e040f662cc249
   - enabled: 0

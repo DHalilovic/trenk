@@ -73,12 +73,15 @@
     <Compile Include="Assets\Scripts\Interfaces\Singleton.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\SceneLoader.cs" />
+    <Compile Include="Assets\Scripts\Menu\Flow\SceneTransitioner.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\SimpleTransitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitioner.cs" />
     <Compile Include="Assets\Scripts\Online\Gameplay\NetGameManager.cs" />
     <Compile Include="Assets\Scripts\Online\Gameplay\NetRoundManager.cs" />
     <Compile Include="Assets\Scripts\Online\Gameplay\NetRoundStarter.cs" />
+    <Compile Include="Assets\Scripts\Online\Gameplay\VsNetGameManager.cs" />
+    <Compile Include="Assets\Scripts\Online\Gameplay\VsStarter.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\INetSerializer.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\InputMessage.cs" />
     <Compile Include="Assets\Scripts\Online\Networking\LobbyMessenger.cs" />
@@ -91,6 +94,7 @@
     <Compile Include="Assets\Scripts\Online\Test\NetTest3.cs" />
     <Compile Include="Assets\Scripts\Online\Test\VsTestStarter.cs" />
     <Compile Include="Assets\Scripts\Time\CountdownTimer.cs" />
+    <Compile Include="Assets\Scripts\Train\TrainFlowManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainGameManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />

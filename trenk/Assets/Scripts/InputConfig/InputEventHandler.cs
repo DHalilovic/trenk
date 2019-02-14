@@ -12,6 +12,10 @@ public class InputEventHandler : MonoBehaviour {
 
     void Update()
     {
+        if (Input.GetKeyDown(inp.getKeyCode("pause")))
+        {
+            InputEventManager.RaiseOnPause();
+        }
         if (Input.GetKeyDown(inp.getKeyCode("left")))
         {
             InputEventManager.RaiseOnLeft();

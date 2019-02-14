@@ -11,13 +11,15 @@ public class LobbyMessenger : MonoBehaviour
     public int lobbyTimeout, matchTimeout;
 
     private CountdownTimer timer;
-    private Action<IEventParam> tryLobbyListener, tryConnectTimeoutListener;
+    private Action<IEventParam> tryLobbyListener, tryConnectTimeoutListener, connectListener;
 
     private void Awake()
     {
         timer = GetComponent<CountdownTimer>();
+
         tryLobbyListener = new Action<IEventParam>((e) => GetHost());
         tryConnectTimeoutListener = new Action<IEventParam>((e) => RemoveSelfHost());
+        connectListener = (e) => timer.Stop();
     }
 
     private void OnEnable()
@@ -28,6 +30,7 @@ public class LobbyMessenger : MonoBehaviour
         {
             EventManager.Instance.Subscribe("try-lobby", tryLobbyListener);
             EventManager.Instance.Subscribe("try-connect-timeout", tryConnectTimeoutListener);
+            EventManager.Instance.Subscribe("connect", tryConnectTimeoutListener);
         }
 
     }

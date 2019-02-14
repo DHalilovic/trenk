@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class NetGameManager : MonoBehaviour
 {
-    public int scoreCap = 5; // Score required to win match
+    public string gameStartEvent = "connect";
+    public string gameEndEvent = "end";
+    public int framesPerStep = 6;
     public GameObject playerPrefab; // Template GameObject for players
     public GameObject fencePrefab; // Template GameObject for borders
     public GameObject minePrefab; // Template GameObject for mines
@@ -32,7 +35,7 @@ public class NetGameManager : MonoBehaviour
     public byte AwayRot { get; protected set; } // Current opponent direction
 
     protected Position homePos, awayPos; // Current positions on board
-    protected Action<IEventParam> onConnectListener;
+    protected Action<IEventParam> onConnectListener, endListener;
     protected NetRoundManager round;
 
     // Contains gameObject placement on board and in scene
@@ -57,12 +60,13 @@ public class NetGameManager : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public virtual void Awake()
     {
         round = GetComponent<NetRoundManager>();
 
         // Prepare listener
-        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true;  Debug.Log("JA");  });
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true; round.enabled = true; Debug.Log("Round start");  });
+        endListener = (e) => { round.enabled = false; round.Ongoing = false; };
     }
 
     public virtual void Start()
@@ -103,24 +107,26 @@ public class NetGameManager : MonoBehaviour
         AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         EventManager e = EventManager.Instance;
 
         if (e != null)
         {
-            EventManager.Instance.Subscribe("connect", onConnectListener);
+            EventManager.Instance.Subscribe(gameStartEvent, onConnectListener);
+            EventManager.Instance.Subscribe(gameEndEvent, endListener);
             //Debug.Log("Subbed");
         }
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         EventManager e = EventManager.Instance;
 
         if (e != null)
         {
-            EventManager.Instance.Unsubscribe("connect", onConnectListener);
+            EventManager.Instance.Unsubscribe(gameStartEvent, onConnectListener);
+            EventManager.Instance.Unsubscribe(gameEndEvent, endListener);
         }
     }
 
@@ -157,6 +163,18 @@ public class NetGameManager : MonoBehaviour
     {
         AwayRot = ClampRotation(AwayRot - 1);
         return AwayRot;
+    }
+
+    // Smoovely move player from start to destination
+    IEnumerator Shift(GameObject o, Vector3 start, Vector3 end)
+    {
+        for (int i = 0; i < framesPerStep; i++)
+        {
+            // Move object towards destination in even increments
+            o.transform.position = Vector3.Lerp(start, end, 1.0f * i / framesPerStep);
+            // Wait a frame
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     // Move players one space based on position, direction
@@ -224,9 +242,10 @@ public class NetGameManager : MonoBehaviour
                 // Move local players on board
                 Board[homePos.x, homePos.y] = HOME;
                 Board[awayPos.x, awayPos.y] = AWAY;
+
                 // Move local players in scene
-                HomePlayer.transform.position = new Vector3(homePos.x, 0, homePos.y);
-                AwayPlayer.transform.position = new Vector3(awayPos.x, 0, awayPos.y);
+                StartCoroutine(Shift(HomePlayer, HomePlayer.transform.position, new Vector3(homePos.x, 0, homePos.y)));
+                StartCoroutine(Shift(AwayPlayer, AwayPlayer.transform.position, new Vector3(awayPos.x, 0, awayPos.y)));
             }
             else if (!homeSafe)
                 hit = HOME;
