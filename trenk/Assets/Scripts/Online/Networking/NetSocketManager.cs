@@ -28,7 +28,7 @@ public class NetSocketManager
 
         if (Hosting)
         {
-            Debug.Log("Host");
+            //Debug.Log("Host");
 
             IPEndPoint localIpe = new IPEndPoint(localIpa, localPort);
 
@@ -40,7 +40,7 @@ public class NetSocketManager
         }
         else
         {
-            Debug.Log("Client");
+            //Debug.Log("Client");
 
             IPAddress remoteIpa = IPAddress.Parse(remoteIp);
             IPEndPoint remoteIpe = new IPEndPoint(remoteIpa, remotePort);
@@ -49,7 +49,7 @@ public class NetSocketManager
                 SocketType.Stream, ProtocolType.Tcp);
             clientSocket.BeginConnect(remoteIpe, OnEndConnect, null);
 
-            Debug.Log("Connecting");
+            //Debug.Log("Connecting");
         }
     }
 
@@ -57,7 +57,7 @@ public class NetSocketManager
     {
         if (serverSocket != null)
         {
-           //serverSocket.Shutdown(SocketShutdown.Both);
+            //serverSocket.Shutdown(SocketShutdown.Both);
             serverSocket.Dispose();
             serverSocket = null;
         }
@@ -73,9 +73,9 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
-        Debug.Log("Accepted client");
+        //Debug.Log("Accepted client");
         EventManager.Instance.Raise("connect", new BoolParam(true));
-        
+
         StopListening(); // Don't listen for additional clients
     }
 
@@ -87,20 +87,20 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
-        Debug.Log("Connected to server");
+        //Debug.Log("Connected to server");
         EventManager.Instance.Raise("connect", new BoolParam(false));
-        
+
     }
 
     private void OnRead(IAsyncResult ar)
     {
-        Debug.Log("Received");
+        //Debug.Log("Received");
 
         int readLength = stream.EndRead(ar);
 
         if (readLength <= 0)
         {
-            Debug.Log("Client disconnected");
+            //Debug.Log("Client disconnected");
             OnDisconnect();
         }
         else
@@ -108,7 +108,7 @@ public class NetSocketManager
             short bodyLength = BitConverter.ToInt16(readBuffer, 1);
             byte[] body = new byte[bodyLength];
             Array.Copy(readBuffer, 3, body, 0, bodyLength);
-            
+
             serializer.Receive(readBuffer[0], body);
         }
 

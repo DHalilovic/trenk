@@ -13,9 +13,9 @@ public class SceneLoader : Singleton<SceneLoader>
         base.Awake();
 
         // Initialize listeners
-        loadSceneListener = OnLoadScene;
-        requestListener = OnRequestScene;
-        loadRequestListener = OnLoadRequest;
+        loadSceneListener = new Action<IEventParam>(OnLoadScene);
+        requestListener = new Action<IEventParam>(OnRequestScene);
+        loadRequestListener = new Action<IEventParam>(OnLoadRequest);
     }
 
     private void OnEnable()
@@ -68,13 +68,13 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private void OnLoadRequest(IEventParam e)
     {
-        Debug.Log("Loaded " + Requested);
+        //Debug.Log("Loaded " + Requested);
         LoadScene(Requested);
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         EventManager.Instance.Raise("in-scene", null);
-        Debug.Log("Scene loaded");
+        //Debug.Log("Scene loaded");
     }
 }

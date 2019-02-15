@@ -719,6 +719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b37d98fed19fc4986298d87419b230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loader: {fileID: 419508483}
   messenger: {fileID: 123907698}
   mainCanvas: {fileID: 107253945}
   matchButton: {fileID: 288373582}

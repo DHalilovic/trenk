@@ -21,8 +21,9 @@ public class SceneTransitioner : Singleton<SceneTransitioner>
         inHash = Animator.StringToHash("Scene_FadeIn");
 
         // Initialize listeners
-        outSceneListener = (e) => anim.Play(outHash);
-        inSceneListener = (e) => anim.Play(inHash);
+        outSceneListener = new Action<IEventParam>((e) => anim.Play(outHash));
+        inSceneListener = new Action<IEventParam>((e) => anim.Play(inHash));
+        
     }
 
     private void OnEnable()

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Transitioner))]
@@ -21,6 +22,10 @@ public class MainMenuManager : MonoBehaviour
 
     private void Awake()
     {
+        transitioner = GetComponent<Transitioner>();
+        mainTrans = mainCanvas.GetComponent<Transitionable>();
+        connectTrans = connectCanvas.GetComponent<Transitionable>();
+
         onLobbyErrorListener = new Action<IEventParam>(
             (e) =>
             {
@@ -32,7 +37,6 @@ public class MainMenuManager : MonoBehaviour
             (e) =>
             {
                 IpParam p = (IpParam)e;
-
                 connectText.text = (p.host) ? "Hosting match" : "Connecting to " + p.ip;
             });
 
@@ -40,23 +44,17 @@ public class MainMenuManager : MonoBehaviour
             (e) =>
             {
                 BoolParam p = (BoolParam)e;
-
                 connectText.text = "Failed to Connect";
                 errorConfirmButton.gameObject.SetActive(true);
             });
 
-        connectListener = new Action<IEventParam>((e) =>
+        connectListener = new Action<IEventParam>(
+            (e) =>
             {
                 Debug.Log("Connect successful");
-                //connectText.text = "Starting Match..."; // Broken
-            
-                //EventManager.Instance.Raise("request-scene", new IntParam(2)); // Broken
+                EventManager.Instance.Raise("request-scene", new IntParam(2));
                 Debug.Log("Requested scene");
             });
-
-        transitioner = GetComponent<Transitioner>();
-        mainTrans = mainCanvas.GetComponent<Transitionable>();
-        connectTrans = connectCanvas.GetComponent<Transitionable>();
     }
 
     private void OnEnable()
@@ -78,10 +76,13 @@ public class MainMenuManager : MonoBehaviour
 
         errorConfirmButton.onClick.AddListener(() => transitioner.GoOneWay(connectTrans, mainTrans));
 
-        EventManager.Instance.Subscribe("lobby-error", onLobbyErrorListener);
-        EventManager.Instance.Subscribe("try-connect", onTryConnectListener);
-        EventManager.Instance.Subscribe("try-connect-timeout", onTryConnectTimeoutListener);
-        EventManager.Instance.Subscribe("connect", connectListener);
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.Subscribe("lobby-error", onLobbyErrorListener);
+            EventManager.Instance.Subscribe("try-connect", onTryConnectListener);
+            EventManager.Instance.Subscribe("try-connect-timeout", onTryConnectTimeoutListener);
+            EventManager.Instance.Subscribe("connect", connectListener);
+        }
     }
 
     private void OnDisable()
@@ -90,11 +91,13 @@ public class MainMenuManager : MonoBehaviour
         trainButton.onClick.RemoveAllListeners();
         errorConfirmButton.onClick.RemoveAllListeners();
 
-        EventManager.Instance.Unsubscribe("lobby-error", onLobbyErrorListener);
-        EventManager.Instance.Unsubscribe("try-connect", onTryConnectListener);
-        EventManager.Instance.Unsubscribe("try-connect-timeout", onTryConnectTimeoutListener);
-        EventManager.Instance.Unsubscribe("connect", connectListener);
-
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.Unsubscribe("lobby-error", onLobbyErrorListener);
+            EventManager.Instance.Unsubscribe("try-connect", onTryConnectListener);
+            EventManager.Instance.Unsubscribe("try-connect-timeout", onTryConnectTimeoutListener);
+            EventManager.Instance.Unsubscribe("connect", connectListener);
+        }
     }
 
 
