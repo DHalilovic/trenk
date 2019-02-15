@@ -39,8 +39,8 @@ public class SceneLoader : Singleton<SceneLoader>
         if (e != null)
         {
             EventManager.Instance.Unsubscribe("load-scene-direct", loadSceneListener);
-            EventManager.Instance.Subscribe("request-scene", requestListener);
-            EventManager.Instance.Subscribe("load-scene-request", loadRequestListener);
+            EventManager.Instance.Unsubscribe("request-scene", requestListener);
+            EventManager.Instance.Unsubscribe("load-scene-request", loadRequestListener);
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -68,6 +68,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private void OnLoadRequest(IEventParam e)
     {
+        Debug.Log("Loaded " + Requested);
         LoadScene(Requested);
     }
 

@@ -21,7 +21,7 @@ public class LobbyMessenger : MonoBehaviour
 
         tryLobbyListener = new Action<IEventParam>((e) => GetHost());
         tryConnectTimeoutListener = new Action<IEventParam>((e) => RemoveSelfHost());
-        connectListener = (e) => { Debug.Log("Stop timeout timer"); /*timer.Stop();*/ }; // TODO Coroutine stopping broken
+        connectListener = (e) => { Debug.Log("Stop timeout timer"); timer.Stop(); }; // TODO Coroutine stopping broken
     }
 
     private void OnEnable()

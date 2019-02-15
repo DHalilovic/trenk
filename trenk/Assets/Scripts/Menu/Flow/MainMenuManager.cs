@@ -45,12 +45,14 @@ public class MainMenuManager : MonoBehaviour
                 errorConfirmButton.gameObject.SetActive(true);
             });
 
-        connectListener = (e) =>
+        connectListener = new Action<IEventParam>((e) =>
             {
                 Debug.Log("Connect successful");
-                connectText.text = "Starting Match...";
-                EventManager.Instance.Raise("request-scene", new IntParam(2));
-            };
+                //connectText.text = "Starting Match..."; // Broken
+            
+                //EventManager.Instance.Raise("request-scene", new IntParam(2)); // Broken
+                Debug.Log("Requested scene");
+            });
 
         transitioner = GetComponent<Transitioner>();
         mainTrans = mainCanvas.GetComponent<Transitionable>();
