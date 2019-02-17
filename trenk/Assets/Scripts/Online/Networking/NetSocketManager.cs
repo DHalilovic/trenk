@@ -73,8 +73,9 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
+        Debug.Log("Accepted client");
         EventManager.Instance.Raise("connect", new BoolParam(true));
-        //Debug.Log("Accepted client");
+        
         StopListening(); // Don't listen for additional clients
     }
 
@@ -86,8 +87,9 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
+        Debug.Log("Connected to server");
         EventManager.Instance.Raise("connect", new BoolParam(false));
-        //Debug.Log("Connected to server");
+        
     }
 
     private void OnRead(IAsyncResult ar)
@@ -98,7 +100,7 @@ public class NetSocketManager
 
         if (readLength <= 0)
         {
-            //Debug.Log("Client disconnected");
+            Debug.Log("Client disconnected");
             OnDisconnect();
         }
         else

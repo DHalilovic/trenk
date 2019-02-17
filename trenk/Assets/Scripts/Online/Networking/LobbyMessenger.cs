@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(CountdownTimer))]
 public class LobbyMessenger : MonoBehaviour
 {
-    public string lobbyUrl = "http://127.0.0.1:8080";
-    public short defaultPort = 8080;
+    public string lobbyUrl = "http://mas.lvc.edu:9999/trenk/hosts";
+    public short defaultPort = 9999;
     public int lobbyTimeout, matchTimeout;
 
     private CountdownTimer timer;
@@ -15,11 +15,13 @@ public class LobbyMessenger : MonoBehaviour
 
     private void Awake()
     {
+        EventManager.Instance.Subscribe("connect", null);
+
         timer = GetComponent<CountdownTimer>();
 
         tryLobbyListener = new Action<IEventParam>((e) => GetHost());
         tryConnectTimeoutListener = new Action<IEventParam>((e) => RemoveSelfHost());
-        connectListener = (e) => timer.Stop();
+        connectListener = (e) => { Debug.Log("Stop timeout timer"); /*timer.Stop();*/ }; // TODO Coroutine stopping broken
     }
 
     private void OnEnable()
@@ -30,7 +32,7 @@ public class LobbyMessenger : MonoBehaviour
         {
             EventManager.Instance.Subscribe("try-lobby", tryLobbyListener);
             EventManager.Instance.Subscribe("try-connect-timeout", tryConnectTimeoutListener);
-            EventManager.Instance.Subscribe("connect", tryConnectTimeoutListener);
+            EventManager.Instance.Subscribe("connect", connectListener);
         }
 
     }
@@ -43,6 +45,7 @@ public class LobbyMessenger : MonoBehaviour
         {
             EventManager.Instance.Unsubscribe("try-lobby", tryLobbyListener);
             EventManager.Instance.Unsubscribe("try-connect-timeout", tryConnectTimeoutListener);
+            EventManager.Instance.Unsubscribe("connect", connectListener);
         }
     }
 

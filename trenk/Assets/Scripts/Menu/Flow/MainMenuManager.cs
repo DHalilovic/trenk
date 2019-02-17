@@ -47,6 +47,7 @@ public class MainMenuManager : MonoBehaviour
 
         connectListener = (e) =>
             {
+                Debug.Log("Connect successful");
                 connectText.text = "Starting Match...";
                 EventManager.Instance.Raise("request-scene", new IntParam(2));
             };
@@ -78,6 +79,7 @@ public class MainMenuManager : MonoBehaviour
         EventManager.Instance.Subscribe("lobby-error", onLobbyErrorListener);
         EventManager.Instance.Subscribe("try-connect", onTryConnectListener);
         EventManager.Instance.Subscribe("try-connect-timeout", onTryConnectTimeoutListener);
+        EventManager.Instance.Subscribe("connect", connectListener);
     }
 
     private void OnDisable()
@@ -89,6 +91,8 @@ public class MainMenuManager : MonoBehaviour
         EventManager.Instance.Unsubscribe("lobby-error", onLobbyErrorListener);
         EventManager.Instance.Unsubscribe("try-connect", onTryConnectListener);
         EventManager.Instance.Unsubscribe("try-connect-timeout", onTryConnectTimeoutListener);
+        EventManager.Instance.Unsubscribe("connect", connectListener);
+
     }
 
 

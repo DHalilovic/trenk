@@ -7,26 +7,35 @@ public class CountdownTimer : MonoBehaviour
 {
     public int ClockTime { get; private set; }
 
+    private bool running = false;
+    private Coroutine lastCo;
+
     public void Launch(int i, string tickName, string completeName, IEventParam onTick, IEventParam onComplete)
     {
         ClockTime = i;
-        StartCoroutine(Tick(tickName, completeName, onTick, onComplete));
+        running = true;
+        lastCo = StartCoroutine(Tick(tickName, completeName, onTick, onComplete));
     }
 
     public void Stop()
     {
-        StopAllCoroutines();
+        if (running)
+            running = false;
     }
 
     IEnumerator Tick(string tickName, string completeName, IEventParam onTick, IEventParam onComplete)
     {
-        while (ClockTime > 0)
+        while (ClockTime > 0 && running)
         {
             EventManager.Instance.Raise(tickName, onTick);
             yield return new WaitForSeconds(1);
             ClockTime--;
         }
 
-        EventManager.Instance.Raise(completeName, onComplete);
+        if (running)
+        {
+            running = false;
+            EventManager.Instance.Raise(completeName, onComplete);
+        }
     }
 }

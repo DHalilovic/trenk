@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbyUrl: http://mas.lvc.edu:9999/trenk/hosts
-  defaultPort: 8080
+  defaultPort: 9999
   lobbyTimeout: 2
   matchTimeout: 3
 --- !u!4 &123907699
@@ -2019,6 +2019,11 @@ PrefabInstance:
     - target: {fileID: 5298989521298777825, guid: f0db1716424b6974d8eef5074339689c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298989520972170714, guid: f0db1716424b6974d8eef5074339689c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
