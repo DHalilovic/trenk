@@ -13,15 +13,15 @@ public class VsStarter : MonoBehaviour
     {
         timer = GetComponent<CountdownTimer>();
 
-        startListener = (e) =>
+        startListener = new Action<IEventParam>((e) =>
         {
             timer.Launch(3, "pre-tick", "countdown", new IntParam(timer.ClockTime), null);
-        };
+        });
 
-        countdownListener = (e) =>
+        countdownListener = new Action<IEventParam>((e) =>
         {
             timer.Launch(3, "countdown-tick", "start", new IntParam(timer.ClockTime), null);
-        };
+        });
     }
 
     private void OnEnable()

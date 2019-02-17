@@ -13,6 +13,6 @@ public class VsNetGameManager : NetGameManager
         timer = GetComponent<CountdownTimer>();
 
         // Prepare listeners
-        onConnectListener = (e) => { round.Ongoing = true; };      
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true; });      
     }
 }

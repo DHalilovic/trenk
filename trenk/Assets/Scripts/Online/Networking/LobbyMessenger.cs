@@ -21,7 +21,7 @@ public class LobbyMessenger : MonoBehaviour
 
         tryLobbyListener = new Action<IEventParam>((e) => GetHost());
         tryConnectTimeoutListener = new Action<IEventParam>((e) => RemoveSelfHost());
-        connectListener = (e) => { Debug.Log("Stop timeout timer"); /*timer.Stop();*/ }; // TODO Coroutine stopping broken
+        connectListener = new Action<IEventParam>((e) => { Debug.Log("Stop timeout timer"); timer.Stop(); }); // TODO Coroutine stopping broken
     }
 
     private void OnEnable()
@@ -59,31 +59,31 @@ public class LobbyMessenger : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Get(lobbyUrl))
         {
             www.timeout = lobbyTimeout;
-            Debug.Log("Sending...");
+            //Debug.Log("Sending...");
             yield return www.SendWebRequest();
-            Debug.Log("Get Sent");
+            //Debug.Log("Get Sent");
 
             if (www.isNetworkError || www.isHttpError)
             {
-                Debug.Log(www.error);
+                //Debug.Log(www.error);
                 EventManager.Instance.Raise("lobby-error", new StringParam(www.error));
             }
             else
             {
                 string url = www.downloadHandler.text;
-                Debug.Log("Received " + url.Length);
+                //Debug.Log("Received " + url.Length);
 
                 // If no url received, this system is to host
                 if (string.IsNullOrEmpty(url) || url.Length < 1)
                 {
-                    Debug.Log("___Host");
+                    //Debug.Log("___Host");
 
                     EventManager.Instance.Raise("try-connect", new IpParam(true, url, defaultPort));
                     timer.Launch(matchTimeout, "try-tick", "try-connect-timeout", new IntParam(timer.ClockTime), new BoolParam(true));
                 }
                 else // Otherwise request connecting to provided host
                 {
-                    Debug.Log("___Client");
+                    //Debug.Log("___Client");
 
                     EventManager.Instance.Raise("try-connect", new IpParam(false, url, defaultPort));
                     timer.Launch(matchTimeout, "try-tick", "try-connect-timeout", new IntParam(timer.ClockTime), new BoolParam(false));
@@ -102,12 +102,12 @@ public class LobbyMessenger : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Delete(lobbyUrl))
         {
             www.timeout = lobbyTimeout;
-            Debug.Log("Sending...");
+            //Debug.Log("Sending...");
             yield return www.SendWebRequest();
-            Debug.Log("Delete Sent");
+            //Debug.Log("Delete Sent");
 
-            if (www.isNetworkError || www.isHttpError)
-                Debug.Log(www.error); 
+            //if (www.isNetworkError || www.isHttpError)
+                //Debug.Log(www.error); 
         }
     }
 }
