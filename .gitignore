@@ -49,3 +49,6 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+trenk/Assembly-CSharp-Editor.csproj
+trenk/Assembly-CSharp.csproj
