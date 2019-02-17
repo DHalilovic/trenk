@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Train\TrainGameManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainPauseManager.cs" />
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
+    <None Include="Assets\Fonts\OFL.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/Unity/Projects/trenk/trenk/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
