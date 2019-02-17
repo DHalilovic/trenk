@@ -15,11 +15,7 @@ public class Transitioner : MonoBehaviour
 
         //// Let origin finish before target begins
         //yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(t);
-
-        origin.gameObject.GetComponent<Canvas>().enabled = false;
-        target.gameObject.GetComponent<Canvas>().enabled = true;
-
+        yield return new WaitForSeconds(t);   
 
         target.In();
 
