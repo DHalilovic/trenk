@@ -15,7 +15,8 @@ public class NodeManager : Singleton<NodeManager>
 
         // Initialize members
         MessageQueue = new Queue<Message>();
-        Net = new NetSocketManager(new MessageSerializer(this));
+        Net = gameObject.AddComponent<NetSocketManager>();
+        Net.Init(new MessageSerializer(this));
 
         // Initialize listeners
         tryConnectListener = new Action<IEventParam>(

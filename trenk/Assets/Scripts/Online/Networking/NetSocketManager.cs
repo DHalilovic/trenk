@@ -4,12 +4,14 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class NetSocketManager
+public class NetSocketManager : MonoBehaviour
 {
-    public short localPort = 9999; // Local port
-    public short remotePort = 9999; // Opponent's port
-    public string remoteIp; // Opponent's address
+    [HideInInspector] public short localPort = 9999; // Local port
+    [HideInInspector] public short remotePort = 9999; // Opponent's port
+    [HideInInspector] public string remoteIp; // Opponent's address
+
     public bool Hosting { get; set; } // Is this hosting or joining a game?
+    public bool Connected { get; private set; }
 
     private Socket serverSocket; // Listens for connection requests
     private Socket clientSocket; // Opponent endpoint
@@ -17,9 +19,18 @@ public class NetSocketManager
     private INetSerializer serializer;
     private readonly byte[] readBuffer = new byte[5000]; // Store received data
 
-    public NetSocketManager(INetSerializer serializer)
+    public void Init(INetSerializer serializer)
     {
         this.serializer = serializer;
+    }
+
+    private void Update()
+    {
+        if (Connected)
+        {
+            Connected = false;
+            EventManager.Instance.Raise("connect", new BoolParam(true));
+        }
     }
 
     public void Listen()
@@ -73,8 +84,8 @@ public class NetSocketManager
         stream = new BufferedStream(new NetworkStream(clientSocket));
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
+        Connected = true;
         //Debug.Log("Accepted client");
-        EventManager.Instance.Raise("connect", new BoolParam(true));
 
         StopListening(); // Don't listen for additional clients
     }

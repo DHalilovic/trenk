@@ -51,9 +51,8 @@ public class MainMenuManager : MonoBehaviour
         connectListener = new Action<IEventParam>(
             (e) =>
             {
-                Debug.Log("Connect successful");
+                connectText.text = "Starting match...";
                 EventManager.Instance.Raise("request-scene", new IntParam(2));
-                Debug.Log("Requested scene");
             });
     }
 

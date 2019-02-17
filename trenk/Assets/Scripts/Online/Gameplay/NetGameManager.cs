@@ -65,7 +65,7 @@ public class NetGameManager : MonoBehaviour
         round = GetComponent<NetRoundManager>();
 
         // Prepare listener
-        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true; round.enabled = true; Debug.Log("Round start");  });
+        onConnectListener = new Action<IEventParam>((e) => { round.Ongoing = true; round.enabled = true; Debug.Log("Round start"); });
         endListener = new Action<IEventParam>((e) => { round.enabled = false; round.Ongoing = false; });
     }
 
