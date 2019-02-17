@@ -17,8 +17,9 @@ public class Transitioner : MonoBehaviour
         //yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(t);
 
-        origin.gameObject.SetActive(false);
-        target.gameObject.SetActive(true);
+        origin.gameObject.GetComponent<Canvas>().enabled = false;
+        target.gameObject.GetComponent<Canvas>().enabled = true;
+
 
         target.In();
 
