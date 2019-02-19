@@ -75,18 +75,41 @@ public class NetRoundManager : MonoBehaviour, Movement
     {
         if (Ongoing)
         {
-            // Get message if possible
+            // Get messages
             if (currentInputMessage == null && manager.Node.MessageQueue.Count > 0)
             {
+                bool found = false; // Determines whether next away move "found"
                 currentInputMessage = manager.Node.MessageQueue.Dequeue();
 
-                // Process or discard message
+                // Discard message if not input
                 if (currentInputMessage.Type == Message.MessageType.INPUT)
                 {
+                    // Retrieve input message
                     InputMessage body = (InputMessage)currentInputMessage.Body;
-                    nextAwayMove = body.Direction;
+                    short curStep = body.GameStep;
+
+                    // Add new moves to away history
+                    for (short i = 0; i < body.Moves.Count; i++, curStep++)
+                    {
+                        // Add only if move's gameStep matches/exceeds local gamestep
+                        if (curStep >= gameStep)
+                            awayHist.Add((short)(body.GameStep + i), body.Moves[i]);
+                    }
+
+                    // Remove moves prior to local gamestep from away history
+                    for (short i = lastAgreedStep; i < gameStep; i++)
+                        awayHist.Remove(i);
+
+                    // If desired gamestep not present, simply wait until next message
+                    if (awayHist.ContainsKey(gameStep))
+                    {
+                        found = true;
+                        nextAwayMove = awayHist[gameStep];
+                    }
                 }
-                else
+
+                // If move not found, wait until next message
+                if (!found)
                     currentInputMessage = null;
             }
 
@@ -96,13 +119,11 @@ public class NetRoundManager : MonoBehaviour, Movement
                 // Increment cycle progress
                 cycleStep++;
 
-                //Debug.Log("CS " + cycleStep);
-
                 // Process movement input if available
                 if (!moveChosen && moveQueue.Count > 0)
                 {
                     nextHomeMove = moveQueue.Dequeue();
-                    SendInput(nextHomeMove);
+                    SendInput();
                     moveChosen = true;
                 }
             }
@@ -110,7 +131,8 @@ public class NetRoundManager : MonoBehaviour, Movement
             if (cycleStep == framesPerStep - 1 && !moveChosen)
             {
                 // Send last-second "straight" message if no local input received
-                SendInput(nextHomeMove);
+                homeHist.Add(gameStep, STRAIGHT);
+                SendInput();
                 moveChosen = true;
             }
 
@@ -157,9 +179,6 @@ public class NetRoundManager : MonoBehaviour, Movement
                 {
                     // Call for end of round
                     EventManager.Instance.Raise("end", new ByteParam(hit));
-
-                    // Disable self
-                    //this.enabled = false;
                 }
 
                 cycleStep = 0; // Reset cycle progress
@@ -173,8 +192,6 @@ public class NetRoundManager : MonoBehaviour, Movement
 
                 // Increment overall frame counter
                 gameStep++;
-
-                //Debug.Log("GS " + gameStep);
             }
         }
     }
