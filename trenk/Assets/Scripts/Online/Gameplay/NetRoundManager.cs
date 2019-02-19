@@ -23,6 +23,8 @@ public class NetRoundManager : MonoBehaviour, Movement
     private byte hit;
     private Message currentInputMessage;
     private Queue<byte> moveQueue; // At max 2 long
+    private LinkedList<InputMessage> homeHist, awayHist; // Move histories since last agreed gamestep
+    private short lastAgreedStep; // Gamestep on which both players synced
 
     private void Awake()
     {

@@ -20,7 +20,7 @@ public class MessageSerializer : INetSerializer
             switch (type)
             {
                 case (byte)Message.MessageType.INPUT:
-                    message = new Message(Message.MessageType.INPUT, new InputMessage(BitConverter.ToInt16(data, 0), data[2]));
+                    message = new Message(Message.MessageType.INPUT, new InputMessage(data));
                     node.MessageQueue.Enqueue(message);
                     break;
                 case (byte)Message.MessageType.COUNT:
