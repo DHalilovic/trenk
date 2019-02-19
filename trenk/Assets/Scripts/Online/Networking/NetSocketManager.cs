@@ -29,7 +29,8 @@ public class NetSocketManager : MonoBehaviour
         if (Connected)
         {
             Connected = false;
-            EventManager.Instance.Raise("connect", new BoolParam(true));
+            EventManager.Instance.Raise("connect", 
+                new BoolParam(Hosting));
         }
     }
 
@@ -99,8 +100,7 @@ public class NetSocketManager : MonoBehaviour
         stream.BeginRead(readBuffer, 0, readBuffer.Length, OnRead, null);
 
         //Debug.Log("Connected to server");
-        EventManager.Instance.Raise("connect", new BoolParam(false));
-
+        Connected = true;
     }
 
     private void OnRead(IAsyncResult ar)

@@ -614,7 +614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000022888184
+      value: 0.000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 22428984, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMin.y
@@ -823,8 +823,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbde2652bd8ab214799173bd96fc82dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hosting: 1
-  remoteIp: 10.2.196.82
+  hosting: 0
+  remoteIp: 192.168.1.154
 --- !u!1 &2093743570
 GameObject:
   m_ObjectHideFlags: 0
