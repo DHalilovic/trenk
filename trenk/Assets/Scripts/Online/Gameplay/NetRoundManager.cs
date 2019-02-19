@@ -23,7 +23,7 @@ public class NetRoundManager : MonoBehaviour, Movement
     private byte hit;
     private Message currentInputMessage;
     private Queue<byte> moveQueue; // At max 2 long
-    private LinkedList<InputMessage> homeHist, awayHist; // Move histories since last agreed gamestep
+    private Dictionary<short, byte> homeHist, awayHist; // Move histories since last agreed gamestep
     private short lastAgreedStep; // Gamestep on which both players synced
 
     private void Awake()
@@ -32,6 +32,8 @@ public class NetRoundManager : MonoBehaviour, Movement
         manager = GetComponent<NetGameManager>();
         framesPerStep = manager.framesPerStep;
         moveQueue = new Queue<byte>();
+        homeHist = new Dictionary<short, byte>();
+        awayHist = new Dictionary<short, byte>();
     }
 
     public void OnLeft()
@@ -52,10 +54,21 @@ public class NetRoundManager : MonoBehaviour, Movement
         }
     }
 
-    private void SendInput(byte b)
+    private void SendInput()
     {
-        byte[] sendStep = BitConverter.GetBytes(gameStep);
-        manager.Node.Net.Send((byte)Message.MessageType.INPUT, 3, new byte[] { sendStep[0], sendStep[1], b });
+        short numMoves = (short)(gameStep - lastAgreedStep);
+        short length = (short)(2 + numMoves);
+
+        byte[] sendStep = BitConverter.GetBytes(lastAgreedStep);
+        byte[] body = new byte[length];
+
+        body[0] = sendStep[0];
+        body[1] = sendStep[1];
+
+        for (short i = 0; i < numMoves; i++)
+            body[i + 2] = homeHist[i];
+
+        manager.Node.Net.Send((byte)Message.MessageType.INPUT, length, body);
     }
 
     private void FixedUpdate()
@@ -82,7 +95,7 @@ public class NetRoundManager : MonoBehaviour, Movement
             {
                 // Increment cycle progress
                 cycleStep++;
-                
+
                 //Debug.Log("CS " + cycleStep);
 
                 // Process movement input if available
@@ -102,8 +115,8 @@ public class NetRoundManager : MonoBehaviour, Movement
             }
 
             // Move board only when message received and current cycle completed
-            if (currentInputMessage != null 
-                && moveChosen 
+            if (currentInputMessage != null
+                && moveChosen
                 && cycleStep > framesPerStep - 1)
             {
                 byte homeRot = 0, awayRot = 0;
@@ -161,7 +174,7 @@ public class NetRoundManager : MonoBehaviour, Movement
                 // Increment overall frame counter
                 gameStep++;
 
-               //Debug.Log("GS " + gameStep);
+                //Debug.Log("GS " + gameStep);
             }
         }
     }
