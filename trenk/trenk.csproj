@@ -656,6 +656,7 @@
     <Compile Include="Assets\Scripts\Menu\Flow\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Menu\Flow\SceneTransitioner.cs" />
+    <Compile Include="Assets\Scripts\Menu\Transitions\ButtonTransitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\SimpleTransitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitionable.cs" />
     <Compile Include="Assets\Scripts\Menu\Transitions\Transitioner.cs" />
@@ -682,6 +683,7 @@
     <Compile Include="Assets\Scripts\Train\TrainRoundManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Fonts\OFL.txt" />
     <None Include="Assets\Plugins\IngameDebugConsole\README.txt" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryCommon.uss" />
     <None Include="Packages\com.unity.collab-proxy\Editor\Resources\Styles\CollabHistoryDark.uss" />

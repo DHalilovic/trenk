@@ -15,6 +15,7 @@ public class InputMessage
     public InputMessage(byte[] data)
     {
         GameStep = BitConverter.ToInt16(data, 0);
+        Moves = new List<byte>();
 
         for (int i = 2; i < data.Length; i++)
             Moves.Add(data[i]);
