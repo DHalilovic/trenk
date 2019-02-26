@@ -106,7 +106,8 @@ public class NetRoundManager : MonoBehaviour, Movement
                         if (curStep >= gameStep)
                         {
                             //Debug.Log("Adding move");
-                            awayHist.Add((short)(body.GameStep + i), body.Moves[i]);
+                            if (!awayHist.ContainsKey((short)(body.GameStep + i)))
+                                awayHist.Add((short)(body.GameStep + i), body.Moves[i]);
                             //Debug.Log("Move added");
                         }
                     }
